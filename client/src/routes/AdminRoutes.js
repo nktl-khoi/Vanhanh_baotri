@@ -1,9 +1,10 @@
 import React from 'react';
-import { AppstoreOutlined } from '@ant-design/icons';
+import Icon, { AppstoreOutlined } from '@ant-design/icons';
 import Dashboard from 'pages/Dashboard';
 import lecturerIcon from 'assets/svg/lecturer.svg';
 import Lecturer from 'pages/Lecturer';
-import AddLecturer from 'pages/Lecturer/AddLecturer';
+import Student from 'pages/Student';
+import AddStudent from 'pages/Student/AddStudent';
 
 const adminRoutes = [
   {
@@ -12,14 +13,19 @@ const adminRoutes = [
     page: () => <Dashboard />,
   },
   {
-    path: '/lecturer/',
+    path: '/lecturer',
     exact: true,
     page: () => <Lecturer />,
   },
   {
-    path: '/lecturer/add',
+    path: '/student/list',
     exact: true,
-    page: () => <AddLecturer />,
+    page: () => <Student />,
+  },
+  {
+    path: '/student/add',
+    exact: true,
+    page: () => <AddStudent />,
   },
 ];
 
@@ -33,18 +39,24 @@ const adminMenuItems = {
       component: <Dashboard />,
     },
     {
+      path: '/lecturer',
       name: 'Lecturer',
+      icon: lecturerIcon,
+      component: <Lecturer />,
+    },
+    {
+      name: 'Student',
       icon: lecturerIcon,
       routes: [
         {
-          path: '/lecturer/',
-          name: 'Lecturer list',
-          component: <Lecturer />,
+          path: '/student/list',
+          name: 'Student list',
+          component: <Student />,
         },
         {
-          path: '/lecturer/add',
-          name: 'Add Lecturer',
-          component: <AddLecturer />,
+          path: '/student/add',
+          name: 'Add student',
+          component: <AddStudent />,
         },
       ],
     },
