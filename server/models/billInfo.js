@@ -1,27 +1,20 @@
 module.exports = (sequelize, Sequelize) => {
-  const Bill = sequelize.define(
-    'bill',
+  const BillInfo = sequelize.define(
+    'billinfo',
     {
       idBill: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         field: 'idbill',
       },
-      idAccount: {
+      idCourse: {
         type: Sequelize.INTEGER,
-        field: 'idaccount',
+        primaryKey: true,
+        field: 'idcourse',
       },
-      idStudent: {
-        type: Sequelize.INTEGER,
-        field: 'idstudent',
-      },
-      createdDate: {
-        type: Sequelize.DATE,
-        field: 'createddate',
-      },
-      totalFee: {
+      fee: {
         type: Sequelize.BIGINT,
-        field: 'totalfee',
+        field: 'fee',
       },
     },
     {
@@ -35,5 +28,5 @@ module.exports = (sequelize, Sequelize) => {
     }
   );
 
-  return Bill;
+  return BillInfo;
 };
