@@ -32,15 +32,11 @@ const MainLayout = props => {
       location={{
         pathname,
       }}
-      // onPageChange={param => {
-      //   setPathname(param.pathname || '/');
-      // }}
-      headerTitleRender={(logo, title) => (
-        <NavLink to="/" onClick={() => setPathname('/')}>
-          {logo}
-          {title}
-        </NavLink>
-      )}
+      onPageChange={param => {
+        setPathname(param.pathname || '/');
+      }}
+      onTopMixMenuHeaderClick={e => console.log(e)}
+      onMenuHeaderClick={e => console.log(e)}
       menuItemRender={(item, dom) => (
         <NavLink to={item.path} onClick={() => setPathname(item.path || '/')}>
           {dom}

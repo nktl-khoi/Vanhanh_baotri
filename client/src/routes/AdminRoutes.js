@@ -3,10 +3,11 @@ import { AppstoreOutlined } from '@ant-design/icons';
 import Dashboard from 'pages/Dashboard';
 import lecturerIcon from 'assets/svg/lecturer.svg';
 import Lecturer from 'pages/Lecturer';
-import Student from 'pages/Student';
-import AddStudent from 'pages/Student/AddStudent';
+import AddLecturer from 'pages/Lecturer/AddLecturer';
 import Employee from 'pages/Employee';
 import AddEmployee from 'pages/Employee/AddEmployee';
+import Student from 'pages/Student';
+import AddStudent from 'pages/Student/AddStudent';
 
 const adminRoutes = [
   {
@@ -15,12 +16,27 @@ const adminRoutes = [
     page: () => <Dashboard />,
   },
   {
-    path: '/lecturer',
+    path: '/lecturer/',
     exact: true,
     page: () => <Lecturer />,
   },
   {
-    path: '/student/',
+    path: '/lecturer/add',
+    exact: true,
+    page: () => <AddLecturer />,
+  },
+  {
+    path: '/employee/',
+    exact: true,
+    page: () => <Employee />,
+  },
+  {
+    path: '/employee/add',
+    exact: true,
+    page: () => <AddEmployee />,
+  },
+  {
+    path: '/student/list',
     exact: true,
     page: () => <Student />,
   },
@@ -29,16 +45,6 @@ const adminRoutes = [
     exact: true,
     page: () => <AddStudent />,
   },
-  {
-    path: '/employee/',
-    exact: true,
-    page: () => <Employee />
-  },
-  {
-    path: '/employee/add',
-    exact: true,
-    page: () => <AddEmployee />
-  }
 ];
 
 const adminMenuItems = {
@@ -51,17 +57,43 @@ const adminMenuItems = {
       component: <Dashboard />,
     },
     {
-      path: '/lecturer',
       name: 'Lecturer',
       icon: lecturerIcon,
-      component: <Lecturer />,
+      routes: [
+        {
+          path: '/lecturer/',
+          name: 'Lecturer list',
+          component: <Lecturer />,
+        },
+        {
+          path: '/lecturer/add',
+          name: 'Add Lecturer',
+          component: <AddLecturer />,
+        },
+      ],
+    },
+    {
+      name: 'Employee',
+      icon: lecturerIcon,
+      routes: [
+        {
+          path: '/employee/',
+          name: 'Employee list',
+          component: <Employee />,
+        },
+        {
+          path: '/employee/add',
+          name: 'Add Employee',
+          component: <AddEmployee />,
+        },
+      ],
     },
     {
       name: 'Student',
       icon: lecturerIcon,
       routes: [
         {
-          path: '/student',
+          path: '/student/list',
           name: 'Student list',
           component: <Student />,
         },
@@ -72,22 +104,6 @@ const adminMenuItems = {
         },
       ],
     },
-    {
-      name: 'Employee',
-      icon: lecturerIcon,
-      routes: [
-        {
-          path: '/employee',
-          name: 'Employee list',
-          component: <Employee />,
-        },
-        {
-          path: '/employee/add',
-          name: 'Add employee',
-          component: <AddEmployee />,
-        },
-      ]
-    }
   ],
 };
 export { adminRoutes, adminMenuItems };

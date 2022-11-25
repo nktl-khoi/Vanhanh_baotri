@@ -1,8 +1,7 @@
 import React from 'react';
-import { Button, Card, Input, Select, Table, Tag, Tooltip, Breadcrumb, Row, Col } from 'antd';
+import { Button, Card, Input, Select, Table, Tag, Tooltip, Breadcrumb } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styles from './index.module.less';
-import { NavLink } from 'react-router-dom';
 
 const { Option } = Select;
 const { Search } = Input;
@@ -89,7 +88,7 @@ const data = [
 
 const Lecturer = () => {
   return (
-    <>
+    <div>
       <Breadcrumb style={{ marginBottom: '20px' }}>
         <Breadcrumb.Item>Home</Breadcrumb.Item>
         <Breadcrumb.Item>
@@ -101,8 +100,8 @@ const Lecturer = () => {
       </Breadcrumb>
       <h3 className="heading">Lecturer list</h3>
       <Card>
-        <Row gutter={[20, 20]} align="top">
-          <Col xs={24} sm={16} md={10} lg={8} xl={8}>
+        <div className={styles.wrapper}>
+          <div>
             <Search
               className={styles.search}
               size="large"
@@ -111,8 +110,6 @@ const Lecturer = () => {
               enterButton
               onSearch={onSearch}
             />
-          </Col>
-          <Col xs={24} sm={8} md={6} lg={6} xl={4}>
             <Select
               className={styles.select}
               size="large"
@@ -122,19 +119,14 @@ const Lecturer = () => {
               <Option value="working">Working</Option>
               <Option value="unemployed">Unemployed</Option>
             </Select>
-          </Col>
-          <Col xs={0} md={2} lg={4} xl={8} flex="auto" />
-          <Col xs={24} sm={24} md={6} lg={6} xl={4}>
-            <Button className={styles.btn} size="large" type="primary">
-              <NavLink to="/lecturer/add">Add lecturer</NavLink>
-            </Button>
-          </Col>
-          <Col span={24}>
-            <Table bordered columns={columns} dataSource={data} />
-          </Col>
-        </Row>
+          </div>
+          <Button className={styles.btn} size="large" type="primary">
+            Add lecturer
+          </Button>
+        </div>
+        <Table columns={columns} dataSource={data} />
       </Card>
-    </>
+    </div>
   );
 };
 
