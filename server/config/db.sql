@@ -3,15 +3,15 @@ CREATE TABLE "user" (
   displayName varchar(240),
   gender varchar(240),
   phoneNumber varchar(240),
-  imageURL varchar(1000),
+  imgURL varchar(1000),
   address varchar(240),
-  dob date,
+  dateOfBirth date,
   isActived boolean
 );
 
 CREATE TABLE role (
   idRole int primary key,
-  name varchar(240)
+  nameOfRole varchar(240)
 );
 
 CREATE TABLE account (
@@ -24,8 +24,8 @@ CREATE TABLE account (
   constraint FK_User foreign key (idUser) references "user"(idUser)
 );
 
-CREATE TABLE parameter (
-  idParameter int primary key,
+CREATE TABLE reference (
+  idReference int primary key,
   name varchar(240),
   value varchar(240)
 );
