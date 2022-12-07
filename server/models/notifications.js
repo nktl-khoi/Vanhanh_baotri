@@ -3,10 +3,10 @@ module.exports = (sequelize, Sequelize) => {
     'Notifications',
     {
       idNotification: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         primaryKey: true,
+        defaultValue: Sequelize.UUIDV4,
         field: 'idnotification',
-        autoIncrement: true,
       },
       title: {
         type: Sequelize.STRING,
@@ -20,13 +20,9 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.DATE,
         field: 'createdate',
       },
-      toEmployee: {
-        type: Sequelize.BOOLEAN,
-        field: 'toemployee',
-      },
-      toLecturer: {
-        type: Sequelize.BOOLEAN,
-        field: 'tolecturer',
+      isEmployee: {
+        type: Sequelize.UUID,
+        field: 'isemployee',
       },
     },
     {
@@ -40,5 +36,12 @@ module.exports = (sequelize, Sequelize) => {
     }
   );
 
+  Notifications.associate = models => {
+    Notifications.belongsToMany(models.User, {
+      through: models.Noti_Account,
+      foreignKey: 'idNotification',
+      onDelete: 'SET NULL',
+    });
+  };
   return Notifications;
 };

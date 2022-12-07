@@ -3,18 +3,27 @@ module.exports = (sequelize, Sequelize) => {
     'Level',
     {
       idLevel: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         primaryKey: true,
-        autoIncrement: true,
+        defaultValue: Sequelize.UUIDV4,
         field: 'idlevel',
       },
-      idTypeOfCourse: {
-        type: Sequelize.INTEGER,
-        field: 'idtypeofcourse',
+      levelName: {
+        type: Sequelize.STRING,
+        field: 'levelname',
       },
       point: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
         field: 'point',
+      },
+      language: {
+        type: Sequelize.STRING,
+        field: 'language',
+      },
+      isDeleted: {
+        type: Sequelize.BOOLEAN,
+        file: 'isdeleted',
+        defaultValue: false,
       },
     },
     {
@@ -27,5 +36,11 @@ module.exports = (sequelize, Sequelize) => {
       updatedAt: false,
     }
   );
+
+  Level.associate = models => {
+    Level.hasMany(models.Course, {
+      foreignKey: 'idLevel',
+    });
+  };
   return Level;
 };

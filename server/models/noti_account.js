@@ -3,12 +3,12 @@ module.exports = (sequelize, Sequelize) => {
     'Noti_Account',
     {
       idNotification: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         field: 'idnotification',
       },
-      idAccount: {
-        type: Sequelize.INTEGER,
-        field: 'idaccount',
+      idUser: {
+        type: Sequelize.UUID,
+        field: 'iduser',
       },
     },
     {

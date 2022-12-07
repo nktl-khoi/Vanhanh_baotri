@@ -12,9 +12,9 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.UUID,
         field: 'iduser',
       },
-      idAccount: {
-        type: Sequelize.UUID,
-        field: 'idaccount',
+      isDeleted: {
+        type: Sequelize.BOOLEAN,
+        field: 'isdeleted',
       },
     },
     {
@@ -28,11 +28,14 @@ module.exports = (sequelize, Sequelize) => {
     }
   );
   Lecturer.associate = models => {
-    Lecturer.belongsTo(models.Account, {
-      foreignKey: 'idAccount',
-    });
     Lecturer.belongsTo(models.User, {
       foreignKey: 'idUser',
+    });
+
+    Lecturer.belongsToMany(models.Class, {
+      through: models.Teaching,
+      foreignKey: 'idLecturer',
+      onDelete: 'SET NULL',
     });
   };
 

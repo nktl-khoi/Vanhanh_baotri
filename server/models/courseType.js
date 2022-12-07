@@ -1,25 +1,16 @@
 module.exports = (sequelize, Sequelize) => {
-  const Account = sequelize.define(
-    'Account',
+  const CourseType = sequelize.define(
+    'CourseType',
     {
-      idAccount: {
+      idCourseType: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
-        field: 'idaccount',
+        field: 'idcoursetype',
       },
-      username: {
+      typeName: {
         type: Sequelize.STRING,
-        field: 'username',
-        unique: true,
-      },
-      password: {
-        type: Sequelize.STRING,
-        field: 'password',
-      },
-      idRole: {
-        type: Sequelize.UUID,
-        field: 'idrole',
+        field: 'typename',
       },
       isDeleted: {
         type: Sequelize.BOOLEAN,
@@ -37,11 +28,10 @@ module.exports = (sequelize, Sequelize) => {
       updatedAt: false,
     }
   );
-  Account.associate = models => {
-    Account.belongsTo(models.Role, {
-      foreignKey: 'idRole',
+  CourseType.associate = function (models) {
+    CourseType.hasMany(models.Course, {
+      foreignKey: 'idCourseType',
     });
   };
-
-  return Account;
+  return CourseType;
 };
