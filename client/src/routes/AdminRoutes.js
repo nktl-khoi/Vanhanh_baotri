@@ -3,11 +3,13 @@ import { AppstoreOutlined } from '@ant-design/icons';
 import Dashboard from 'pages/Dashboard';
 import lecturerIcon from 'assets/svg/lecturer.svg';
 import Lecturer from 'pages/Lecturer';
+import Student from 'pages/Student';
+import AddStudent from 'pages/Student/AddStudent';
+
+const PandaIcon = props => <Icon component={svg} {...props} />;
 import AddLecturer from 'pages/Lecturer/AddLecturer';
 import Employee from 'pages/Employee';
 import AddEmployee from 'pages/Employee/AddEmployee';
-import Student from 'pages/Student';
-import AddStudent from 'pages/Student/AddStudent';
 
 const adminRoutes = [
   {
@@ -26,16 +28,6 @@ const adminRoutes = [
     page: () => <AddLecturer />,
   },
   {
-    path: '/employee/',
-    exact: true,
-    page: () => <Employee />,
-  },
-  {
-    path: '/employee/add',
-    exact: true,
-    page: () => <AddEmployee />,
-  },
-  {
     path: '/student/list',
     exact: true,
     page: () => <Student />,
@@ -44,6 +36,21 @@ const adminRoutes = [
     path: '/student/add',
     exact: true,
     page: () => <AddStudent />,
+  },
+  {
+    path: '/student/edit/:idStudent',
+    exact: true,
+    page: () => <AddStudent />,
+  },
+  {
+    path: '/employee/',
+    exact: true,
+    page: () => <Employee />,
+  },
+  {
+    path: '/employee/add',
+    exact: true,
+    page: () => <AddEmployee />,
   },
 ];
 
@@ -73,22 +80,6 @@ const adminMenuItems = {
       ],
     },
     {
-      name: 'Employee',
-      icon: lecturerIcon,
-      routes: [
-        {
-          path: '/employee/',
-          name: 'Employee list',
-          component: <Employee />,
-        },
-        {
-          path: '/employee/add',
-          name: 'Add Employee',
-          component: <AddEmployee />,
-        },
-      ],
-    },
-    {
       name: 'Student',
       icon: lecturerIcon,
       routes: [
@@ -101,6 +92,22 @@ const adminMenuItems = {
           path: '/student/add',
           name: 'Add student',
           component: <AddStudent />,
+        },
+      ],
+    },
+    {
+      name: 'Employee',
+      icon: lecturerIcon,
+      routes: [
+        {
+          path: '/employee/',
+          name: 'Employee list',
+          component: <Employee />,
+        },
+        {
+          path: '/employee/add',
+          name: 'Add Employee',
+          component: <AddEmployee />,
         },
       ],
     },
