@@ -1,4 +1,15 @@
-const { Class, TimeFrame } = require('../models');
+const {
+  Class,
+  TimeFrame,
+  Course,
+  Student,
+  Learning,
+  Teaching,
+  ClassTime,
+  Lecturer,
+  User,
+} = require('../models');
+const Sequelize = require('sequelize');
 
 const create = (req, res) => {
   // Validate request
@@ -11,16 +22,32 @@ const create = (req, res) => {
 
   // Create a Class
   const classroom = {
+    className: req.body.className,
     idCourse: req.body.idCourse,
     room: req.body.room,
-    startingDate: req.body.startingDate,
-    endingDate: req.body.endingDate,
-    idCenter: req.body.idCenter,
+    startDate: req.body.startDate,
+    endDate: req.body.endDate,
     isDeleted: req.body.isDeleted,
   };
+  let timeFrames;
+  if (req.body.timeFrames) {
+    timeFrames = req.body.timeFrames;
+  }
+  console.log(timeFrames);
   // Save Class in the database
   Class.create(classroom)
     .then(data => {
+      if (timeFrames.length > 0) {
+        timeFrames.map(timeFrame => {
+          let classTime = {
+            idTimeFrame: timeFrame.idTimeFrame,
+            dayOfWeek: timeFrame.dayOfWeek,
+            idClass: data.idClass,
+          };
+          console.log(classTime);
+          ClassTime.create(classTime);
+        });
+      }
       res.send(data);
     })
     .catch(err => {
@@ -35,9 +62,24 @@ const findAll = (req, res) => {
   Class.findAll({
     include: [
       {
-        model: TimeFrame,
-        as: 'timeFrame',
+        model: Learning,
+        include: [
+          {
+            model: Student,
+          },
+        ],
       },
+      { model: Course },
+      {
+        model: Lecturer,
+        include: [
+          {
+            model: User,
+          },
+        ],
+      },
+
+      { model: ClassTime },
     ],
   })
     .then(data => {
@@ -60,6 +102,9 @@ const findOne = (req, res) => {
         model: TimeFrame,
         as: 'timeFrame',
       },
+      {
+        model: Lecturer,
+      },
     ],
   })
     .then(data => {
@@ -79,28 +124,76 @@ const findOne = (req, res) => {
 };
 
 // Update a Class by the id in the request
-const update = (req, res) => {
-  const idClass = req.params.idClass;
+const update = async (req, res) => {
+  try {
+    const idClass = req.params.idClass;
 
-  Class.update(req.body, {
-    where: { idClass: idClass },
-  })
-    .then(num => {
-      if (num == 1) {
-        res.send({
-          message: 'Class was updated successfully.',
-        });
+    if (req.body.idLecturer) {
+      const classRoom = await Class.findByPk(idClass);
+      const { idLecturer } = req.body;
+      const lecturer = await Lecturer.findByPk(idLecturer);
+      classRoom.removeLecturers([lecturer]);
+      res.status(200).send({
+        message: 'Dismissal lecturer successfully.',
+      });
+    } else if (req.body.lecturers) {
+      const classRoom = await Class.findByPk(idClass);
+      const { lecturers } = req.body;
+      console.log(lecturers);
+      if (lecturers.length > 0) {
+        await classRoom.addLecturers(lecturers);
+      }
+      res.status(200).send({
+        message: 'Appoint lecturer successfully.',
+      });
+    } else {
+      const result = await Class.update(req.body, {
+        where: { idClass: idClass },
+      });
+      if (result == 1) {
+        let timeFrames;
+        if (req.body.timeFrames) {
+          timeFrames = req.body.timeFrames;
+        }
+        if (timeFrames.length > 0) {
+          await ClassTime.destroy({
+            where: { idClass: idClass },
+          });
+          let isSuccess = true;
+
+          timeFrames.map(timeFrame => {
+            let classTime = {
+              idTimeFrame: timeFrame.idTimeFrame,
+              dayOfWeek: timeFrame.dayOfWeek,
+              idClass: idClass,
+            };
+            ClassTime.create(classTime).then(num => {
+              if (num < 1) {
+                isSuccess = false;
+              }
+            });
+          });
+          if (isSuccess) {
+            res.status(200).send({
+              message: 'Course was updated successfully',
+            });
+          } else {
+            res.status(500).send({
+              message: `Cannot update Class with id=${idClass}. Maybe Class was not found!`,
+            });
+          }
+        }
       } else {
-        res.send({
-          message: `Cannot update Class with id=${idClass}. Maybe Class was not found or req.body is empty!`,
+        res.status(500).send({
+          message: `Cannot update course with idcourse=${idClass}. Maybe course was not found or req.body is empty!`,
         });
       }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: 'Error updating Class with id=' + idClass,
-      });
+    }
+  } catch (err) {
+    res.status(500).send({
+      message: err,
     });
+  }
 };
 
 // Delete a Class with the specified id in the request
