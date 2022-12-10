@@ -13,7 +13,7 @@ module.exports = app => {
   router.get('/:idLecturer', Lecturer.findOne);
 
   // Update a Lecturer with id
-  router.patch('/:idLecturer', Lecturer.update);
+  router.put('/:idLecturer', Lecturer.update);
 
   // Delete a Lecturer with id
   router.delete('/:idLecturer', Lecturer.remove);

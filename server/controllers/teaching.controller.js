@@ -1,46 +1,26 @@
-const { Teaching, Lecturer, Class } = require('../models');
+const Teaching = require('../models').Teaching;
 
 const create = async (req, res) => {
-  if (!req.body) {
-    res.status(400).send({
-      message: 'Content can not be empty!',
-    });
-    return;
+  try {
+    const teaching = {
+      idLecturer: req.body.idLecturer,
+      idClass: req.body.idClass,
+    };
+
+    const data = await Teaching.create(teaching);
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ message: error });
   }
-  const teaching = {
-    idLecturer: req.body.idLecturer,
-    idClass: req.body.idClass,
-  };
-  Teaching.create(teaching)
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: err.message || 'Some error occurred while creating the Teaching.',
-      });
-    });
-  // Teaching.bulkCreate(req.body, { returning: true })
-  //   .then(data => {
-  //     res.send(data);
-  //   })
-  //   .catch(err => {
-  //     res.status(500).send({
-  //       message: err.message || 'Some error occurred while creating the Teaching.',
-  //     });
-  //   });
 };
 
-const findAll = (req, res) => {
-  Teaching.findAll({})
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: err.message || 'Some error occurred while retrieving from database.',
-      });
-    });
+const findAll = async (req, res) => {
+  try {
+    const data = await Teaching.findAll();
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
 };
 
 const findOne = async (req, res) => {
