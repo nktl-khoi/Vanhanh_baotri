@@ -3,19 +3,19 @@ module.exports = app => {
 
   var router = require('express').Router();
 
-  // Create a new Column_Transcript
+  // Create a new Bill
   router.post('/', Column_Transcript.create);
 
-  // Retrieve all Column_Transcript
+  // Retrieve all Bill
   router.get('/', Column_Transcript.findAll);
 
-  // Retrieve a single Column_Transcript with id
+  // Retrieve a single Bill with id
   router.get('/:idColumn', Column_Transcript.findOne);
 
-  // Update a Column_Transcript with id
+  // Update a Bill with id
   router.put('/:idColumn', Column_Transcript.update);
 
-  // Delete a Column_Transcript with id
+  // Delete a Bill with id
   router.delete('/:idColumn', Column_Transcript.remove);
 
   app.use('/api/columntranscripts', router);
