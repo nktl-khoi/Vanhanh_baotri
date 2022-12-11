@@ -1,16 +1,16 @@
 module.exports = (sequelize, Sequelize) => {
-  const TestType = sequelize.define(
-    'TestType',
+  const TypeOfTest = sequelize.define(
+    'TypeOfTest',
     {
-      idTestType: {
+      idTypeOfTest: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
-        field: 'idtesttype',
+        field: 'idtypeoftest',
       },
-      typeName: {
+      nameOfType: {
         type: Sequelize.STRING,
-        field: 'typename',
+        field: 'nameoftype',
         unique: true,
       },
     },
@@ -25,10 +25,10 @@ module.exports = (sequelize, Sequelize) => {
     }
   );
 
-  TestType.associate = models => {
-    TestType.hasMany(models.Exam, {
-      foreignKey: 'idTestType',
+  TypeOfTest.associate = models => {
+    TypeOfTest.hasMany(models.Exam, {
+      foreignKey: 'idTypeOfTest',
     });
   };
-  return TestType;
+  return TypeOfTest;
 };
