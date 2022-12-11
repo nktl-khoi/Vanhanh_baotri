@@ -55,16 +55,20 @@ module.exports = (sequelize, Sequelize) => {
       foreignKey: 'idClass',
       onDelete: 'SET NULL',
     });
-    Class.belongsToMany(models.Student, {
-      through: models.Learning,
-      foreignKey: 'idClass',
-      onDelete: 'SET NULL',
-    });
+    // Class.belongsToMany(models.Student, {
+    //   through: models.Learning,
+    //   foreignKey: 'idClass',
+    //   onDelete: 'SET NULL',
+    // });
     Class.belongsToMany(models.Lecturer, {
       through: models.Teaching,
       foreignKey: 'idClass',
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE',
+    });
+    Class.hasMany(models.Learning, {
+      foreignKey: 'idClass',
+      onDelete: 'SET NULL',
     });
     Class.hasMany(models.ClassTime, {
       foreignKey: 'idClass',
@@ -75,9 +79,7 @@ module.exports = (sequelize, Sequelize) => {
       foreignKey: 'idCourse',
       onDelete: 'SET NULL',
     });
-    Class.hasMany(models.Exam, {
-      foreignKey: 'idClass',
-    });
+
     // Class.belongsTo(models.Center, {
     //   foreignKey: 'idCenter',
     // });

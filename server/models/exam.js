@@ -8,25 +8,21 @@ module.exports = (sequelize, Sequelize) => {
         defaultValue: Sequelize.UUIDV4,
         field: 'idexam',
       },
-      examName: {
+      nameOfExam: {
         type: Sequelize.STRING,
-        field: 'examname',
+        field: 'nameofexam',
       },
       fileUrl: {
-        type: Sequelize.ARRAY(Sequelize.STRING),
+        type: Sequelize.STRING,
         field: 'fileurl',
       },
       postedDate: {
         type: Sequelize.DATE,
         field: 'posteddate',
       },
-      idClass: {
+      idTypeOfTest: {
         type: Sequelize.UUID,
-        field: 'idclass',
-      },
-      idTestType: {
-        type: Sequelize.UUID,
-        field: 'idtesttype',
+        field: 'idtypeoftest',
       },
       idColumn: {
         type: Sequelize.UUID,
@@ -49,17 +45,22 @@ module.exports = (sequelize, Sequelize) => {
       sourceKey: 'idExam',
       onDelete: 'CASCADE',
     });
-    Exam.belongsTo(models.TestType, {
-      foreignKey: 'idTestType',
+    Exam.belongsTo(models.TypeOfTest, {
+      foreignKey: 'idTypeOfTest',
       sourceKey: 'idExam',
       onDelete: 'CASCADE',
     });
-    Exam.belongsTo(models.Class, {
-      foreignKey: 'idClass',
-    });
-    Exam.belongsToMany(models.Student, {
-      through: models.Testing,
+    // Exam.belongsToMany(models.Class, {
+    //   through: models.Learning,
+    //   foreignKey: 'idExam',
+    // });
+    // Exam.belongsToMany(models.Student, {
+    //   through: models.Learning,
+    //   foreignKey: 'idExam',
+    // });
+    Exam.hasMany(models.Learning, {
       foreignKey: 'idExam',
+      onDelete: 'SET NULL',
     });
   };
   return Exam;

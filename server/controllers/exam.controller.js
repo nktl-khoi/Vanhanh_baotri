@@ -1,4 +1,4 @@
-const { Exam, TestType, Column_Transcript } = require('../models');
+const { Exam, TypeOfTest, Column_Transcript } = require('../models');
 
 const create = (req, res) => {
   // Validate request
@@ -11,11 +11,10 @@ const create = (req, res) => {
 
   // Create a Exam
   const exam = {
-    examName: req.body.examName,
+    nameOfExam: req.body.nameOfExam,
     fileUrl: req.body.fileUrl,
     postedDate: req.body.postedDate,
-    idClass: req.body.idClass,
-    idTestType: req.body.idTestType,
+    idTypeOfTest: req.body.idTypeOfTest,
     idColumn: req.body.idColumn,
   };
   // Save Exam in the database
@@ -35,7 +34,7 @@ const findAll = (req, res) => {
   Exam.findAll({
     include: [
       {
-        model: TestType,
+        model: TypeOfTest,
       },
       {
         model: Column_Transcript,
@@ -59,7 +58,7 @@ const findOne = (req, res) => {
   Exam.findByPk(idExam, {
     include: [
       {
-        model: TestType,
+        model: TypeOfTest,
       },
       {
         model: Column_Transcript,
@@ -90,7 +89,7 @@ const update = (req, res) => {
     where: { idExam: idExam },
     include: [
       {
-        model: TestType,
+        model: TypeOfTest,
       },
       {
         model: Column_Transcript,

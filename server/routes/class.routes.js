@@ -18,8 +18,5 @@ module.exports = app => {
   // Delete a class with id
   router.delete('/:idClass', classRoom.remove);
 
-  //Find class by idCourse
-  router.get('/course/:idCourse', classRoom.findByIdCourse);
-
   app.use('/api/classes', router);
 };

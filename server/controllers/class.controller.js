@@ -1,4 +1,15 @@
-const { Class, TimeFrame, Course, ClassTime, Lecturer, User } = require('../models');
+const {
+  Class,
+  TimeFrame,
+  Course,
+  Student,
+  Learning,
+  Teaching,
+  ClassTime,
+  Lecturer,
+  User,
+} = require('../models');
+const Sequelize = require('sequelize');
 
 const create = (req, res) => {
   // Validate request
@@ -208,24 +219,4 @@ const remove = (req, res) => {
       });
     });
 };
-
-//Find class by idCourse
-const findByIdCourse = (req, res) => {
-  const idCourse = req.params.idCourse;
-
-  Class.findAll({
-    where: {
-      idCourse: idCourse,
-    },
-  })
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: err.message,
-      });
-    });
-};
-
-module.exports = { create, findAll, findOne, update, remove, findByIdCourse };
+module.exports = { create, findAll, findOne, update, remove };
