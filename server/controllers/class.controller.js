@@ -1,17 +1,4 @@
-const {
-  Class,
-  TimeFrame,
-  Course,
-  Student,
-  Exam,
-  Teaching,
-  ClassTime,
-  Lecturer,
-  User,
-  Testing,
-  Column_Transcript,
-} = require('../models');
-const Sequelize = require('sequelize');
+const { Class, TimeFrame, Course, ClassTime, Lecturer, User } = require('../models');
 
 const create = (req, res) => {
   // Validate request
@@ -60,20 +47,8 @@ const create = (req, res) => {
 // Retrieve all Class from the database.
 const findAll = (req, res) => {
   Class.findAll({
-    where: {
-      isDeleted: false,
-    },
     include: [
-      {
-        model: Course,
-        include: [
-          {
-            model: Column_Transcript,
-            as: 'Columns',
-          },
-        ],
-      },
-      // { model: Testing },
+      { model: Course },
       {
         model: Lecturer,
         include: [
@@ -90,9 +65,6 @@ const findAll = (req, res) => {
             model: TimeFrame,
           },
         ],
-      },
-      {
-        model: Student,
       },
     ],
   })
@@ -113,46 +85,10 @@ const findOne = (req, res) => {
   Class.findByPk(idClass, {
     include: [
       {
-        model: Course,
-        include: [
-          {
-            model: Column_Transcript,
-            as: 'Columns',
-          },
-        ],
+        model: TimeFrame,
       },
       {
         model: Lecturer,
-        include: [
-          {
-            model: User,
-          },
-        ],
-      },
-
-      {
-        model: ClassTime,
-        include: [
-          {
-            model: TimeFrame,
-          },
-        ],
-      },
-      {
-        model: Student,
-        include: [
-          {
-            model: User,
-          },
-          {
-            model: Testing,
-            include: [
-              {
-                model: Exam,
-              },
-            ],
-          },
-        ],
       },
     ],
   })
@@ -168,6 +104,38 @@ const findOne = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message: 'Error retrieving Class with idclass=' + idClass,
+      });
+    });
+};
+
+// Find classes by idLecturer
+const findByIdLecturer = (req, res) => {
+  const { idLecturer } = req.params;
+  Class.findAll({
+    include: [
+      {
+        model: Lecturer,
+        where: { idLecturer: idLecturer },
+        include: [
+          {
+            model: User,
+          },
+        ],
+      },
+      {
+        model: Course,
+      },
+      {
+        model: TimeFrame,
+      },
+    ],
+  })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: err.message || 'Some error occurred while retrieving Class.',
       });
     });
 };
@@ -271,4 +239,24 @@ const remove = (req, res) => {
       });
     });
 };
-module.exports = { create, findAll, findOne, update, remove };
+
+//Find class by idCourse
+const findByIdCourse = (req, res) => {
+  const idCourse = req.params.idCourse;
+
+  Class.findAll({
+    where: {
+      idCourse: idCourse,
+    },
+  })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: err.message,
+      });
+    });
+};
+
+module.exports = { create, findAll, findOne, update, remove, findByIdCourse, findByIdLecturer };

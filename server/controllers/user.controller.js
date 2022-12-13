@@ -52,7 +52,7 @@ const findOne = (req, res) => {
   const idUser = req.params.idUser;
 
   User.findByPk(idUser, {
-    // attributes: { exclude: ['password'] },
+    attributes: { exclude: ['password'] },
     include: [
       {
         model: Role,
@@ -84,11 +84,11 @@ const update = (req, res) => {
   })
     .then(num => {
       if (num == 1) {
-        res.status(200).send({
+        res.send({
           message: 'User was updated successfully.',
         });
       } else {
-        res.status(500).send({
+        res.send({
           message: `Cannot update User with id=${idUser}. Maybe User was not found or req.body is empty!`,
         });
       }
