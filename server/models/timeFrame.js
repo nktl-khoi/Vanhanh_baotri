@@ -16,6 +16,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.TIME,
         field: 'endingtime',
       },
+      activate: {
+        type: Sequelize.BOOLEAN,
+        field: 'activate',
+      },
     },
     {
       freezeTableName: true,
@@ -30,6 +34,7 @@ module.exports = (sequelize, Sequelize) => {
   TimeFrame.associate = function (models) {
     TimeFrame.belongsToMany(models.Class, {
       through: models.ClassTime,
+      as: 'class',
       foreignKey: 'idTimeFrame',
     });
     TimeFrame.hasMany(models.ClassTime, {

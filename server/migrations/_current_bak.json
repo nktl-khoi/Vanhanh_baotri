@@ -1,4 +1,8 @@
 {
+<<<<<<< HEAD
+    "revision": 0,
+    "tables": {}
+=======
     "tables": {
         "Attendance": {
             "tableName": "Attendance",
@@ -422,35 +426,24 @@
                     "field": "idexam",
                     "seqType": "Sequelize.UUID"
                 },
-                "examName": {
-                    "field": "examname",
+                "nameOfExam": {
+                    "field": "nameofexam",
                     "seqType": "Sequelize.STRING"
                 },
                 "fileUrl": {
                     "field": "fileurl",
-                    "seqType": "Sequelize.ARRAY(Sequelize.STRING)"
+                    "seqType": "Sequelize.STRING"
                 },
                 "postedDate": {
                     "field": "posteddate",
                     "seqType": "Sequelize.DATE"
                 },
-                "idClass": {
-                    "field": "idclass",
+                "idTypeOfTest": {
+                    "field": "idtypeoftest",
                     "allowNull": true,
                     "references": {
-                        "model": "Class",
-                        "key": "idclass"
-                    },
-                    "onDelete": "CASCADE",
-                    "onUpdate": "CASCADE",
-                    "seqType": "Sequelize.UUID"
-                },
-                "idTestType": {
-                    "field": "idtesttype",
-                    "allowNull": true,
-                    "references": {
-                        "model": "TestType",
-                        "key": "idtesttype"
+                        "model": "TypeOfTest",
+                        "key": "idtypeoftest"
                     },
                     "onDelete": "CASCADE",
                     "onUpdate": "CASCADE",
@@ -778,52 +771,30 @@
                 "idStudent": {
                     "primaryKey": true,
                     "field": "idstudent",
-                    "unique": "Testing_idStudent_idExam_unique",
+                    "allowNull": true,
                     "references": {
                         "model": "Student",
                         "key": "idstudent"
                     },
-                    "onDelete": "CASCADE",
+                    "onDelete": "SET NULL",
                     "onUpdate": "CASCADE",
-                    "allowNull": true,
                     "seqType": "Sequelize.UUID"
                 },
                 "idExam": {
                     "primaryKey": true,
                     "field": "idexam",
-                    "unique": "Testing_idStudent_idExam_unique",
+                    "allowNull": true,
                     "references": {
                         "model": "Exam",
                         "key": "idexam"
                     },
-                    "onDelete": "CASCADE",
+                    "onDelete": "SET NULL",
                     "onUpdate": "CASCADE",
-                    "allowNull": true,
                     "seqType": "Sequelize.UUID"
                 },
                 "score": {
                     "field": "score",
                     "seqType": "Sequelize.FLOAT"
-                }
-            },
-            "indexes": []
-        },
-        "TestType": {
-            "tableName": "TestType",
-            "schema": {
-                "idTestType": {
-                    "defaultValue": {
-                        "internal": true,
-                        "value": "Sequelize.UUIDV4"
-                    },
-                    "primaryKey": true,
-                    "field": "idtesttype",
-                    "seqType": "Sequelize.UUID"
-                },
-                "typeName": {
-                    "field": "typename",
-                    "unique": true,
-                    "seqType": "Sequelize.STRING"
                 }
             },
             "indexes": []
@@ -847,6 +818,26 @@
                 "endingTime": {
                     "field": "endingtime",
                     "seqType": "Sequelize.TIME"
+                }
+            },
+            "indexes": []
+        },
+        "TypeOfTest": {
+            "tableName": "TypeOfTest",
+            "schema": {
+                "idTypeOfTest": {
+                    "defaultValue": {
+                        "internal": true,
+                        "value": "Sequelize.UUIDV4"
+                    },
+                    "primaryKey": true,
+                    "field": "idtypeoftest",
+                    "seqType": "Sequelize.UUID"
+                },
+                "nameOfType": {
+                    "field": "nameoftype",
+                    "unique": true,
+                    "seqType": "Sequelize.STRING"
                 }
             },
             "indexes": []
@@ -922,8 +913,9 @@
             "indexes": []
         }
     },
-    "path": "C:\\Users\\TrungHuynh\\Documents\\GitHub\\Lanspire_Server\\migrations\\_current.json",
-    "backupPath": "C:\\Users\\TrungHuynh\\Documents\\GitHub\\Lanspire_Server\\migrations\\_current_bak.json",
+    "path": "D:\\LangspireServer\\migrations\\_current.json",
+    "backupPath": "D:\\LangspireServer\\migrations\\_current_bak.json",
     "exists": true,
-    "revision": 1
+    "revision": 27
+>>>>>>> dev
 }

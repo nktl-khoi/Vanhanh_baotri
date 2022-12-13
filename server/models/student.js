@@ -38,7 +38,6 @@ module.exports = (sequelize, Sequelize) => {
     Student.belongsToMany(models.Class, {
       through: models.Learning,
       foreignKey: 'idStudent',
-      as: 'Classes',
     });
     Student.belongsToMany(models.ClassTime, {
       through: models.Attendance,
@@ -48,6 +47,10 @@ module.exports = (sequelize, Sequelize) => {
     Student.belongsToMany(models.Exam, {
       through: models.Testing,
       foreignKey: 'idStudent',
+    });
+    Student.hasMany(models.Testing, {
+      foreignKey: 'idStudent',
+      onDelete: 'SET NULL',
     });
   };
 
