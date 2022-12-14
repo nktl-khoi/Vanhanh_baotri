@@ -88,13 +88,14 @@
                         "value": "Sequelize.UUIDV4"
                     },
                     "field": "idbill",
-                    "allowNull": true,
+                    "primaryKey": true,
                     "references": {
                         "model": "Bill",
                         "key": "idbill"
                     },
                     "onDelete": "CASCADE",
                     "onUpdate": "CASCADE",
+                    "unique": "BillInfo_idCourse_idBill_unique",
                     "seqType": "Sequelize.UUID"
                 },
                 "idCourse": {
@@ -106,22 +107,12 @@
                     },
                     "onDelete": "CASCADE",
                     "onUpdate": "CASCADE",
+                    "unique": "BillInfo_idCourse_idBill_unique",
                     "seqType": "Sequelize.UUID"
                 },
                 "fee": {
                     "field": "fee",
                     "seqType": "Sequelize.BIGINT"
-                },
-                "BillIdBill": {
-                    "primaryKey": true,
-                    "references": {
-                        "model": "Bill",
-                        "key": "idbill"
-                    },
-                    "onDelete": "CASCADE",
-                    "onUpdate": "CASCADE",
-                    "field": "BillIdBill",
-                    "seqType": "Sequelize.UUID"
                 }
             },
             "indexes": []
@@ -485,6 +476,14 @@
                     "field": "posteddate",
                     "seqType": "Sequelize.DATE"
                 },
+                "testTime": {
+                    "field": "testtime",
+                    "seqType": "Sequelize.TIME"
+                },
+                "testDate": {
+                    "field": "testdate",
+                    "seqType": "Sequelize.DATE"
+                },
                 "idClass": {
                     "field": "idclass",
                     "allowNull": true,
@@ -836,7 +835,6 @@
                     },
                     "onDelete": "CASCADE",
                     "onUpdate": "CASCADE",
-                    "allowNull": true,
                     "seqType": "Sequelize.UUID"
                 },
                 "idExam": {
@@ -849,7 +847,6 @@
                     },
                     "onDelete": "CASCADE",
                     "onUpdate": "CASCADE",
-                    "allowNull": true,
                     "seqType": "Sequelize.UUID"
                 },
                 "score": {
@@ -977,8 +974,8 @@
             "indexes": []
         }
     },
-    "path": "D:\\Lanspire_Server\\migrations\\_current.json",
-    "backupPath": "D:\\Lanspire_Server\\migrations\\_current_bak.json",
+    "path": "C:\\Users\\TrungHuynh\\Documents\\GitHub\\Lanspire_Server\\migrations\\_current.json",
+    "backupPath": "C:\\Users\\TrungHuynh\\Documents\\GitHub\\Lanspire_Server\\migrations\\_current_bak.json",
     "exists": true,
     "revision": 1
 }
