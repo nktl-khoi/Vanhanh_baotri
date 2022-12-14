@@ -22,11 +22,6 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.FLOAT,
         field: 'max',
       },
-      isDeleted: {
-        type: Sequelize.BOOLEAN,
-        field: 'isdeleted',
-        defaultValue: false,
-      },
     },
     {
       freezeTableName: true,

@@ -1,28 +1,25 @@
 module.exports = app => {
-  const classroom = require('../controllers').Class;
+  const classRoom = require('../controllers').Class;
 
   var router = require('express').Router();
 
   // Create a new class
-  router.post('/', classroom.create);
+  router.post('/', classRoom.create);
 
   // Retrieve all class
-  router.get('/', classroom.findAll);
+  router.get('/', classRoom.findAll);
 
   // Retrieve a single class with id
-  router.get('/:idClass', classroom.findOne);
+  router.get('/:idClass', classRoom.findOne);
 
   // Update a class with id
-  router.put('/:idClass', classroom.update);
+  router.put('/:idClass', classRoom.update);
 
   // Delete a class with id
-  router.delete('/:idClass', classroom.remove);
+  router.delete('/:idClass', classRoom.remove);
 
   //Find class by idCourse
-  router.get('/course/:idCourse', classroom.findByIdCourse);
-
-  //Find class by idLecturer
-  router.get('/lecturer/:idLecturer', classroom.findByIdLecturer);
+  router.get('/course/:idCourse', classRoom.findByIdCourse);
 
   app.use('/api/classes', router);
 };

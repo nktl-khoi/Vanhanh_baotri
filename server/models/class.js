@@ -51,6 +51,7 @@ module.exports = (sequelize, Sequelize) => {
   Class.associate = function (models) {
     Class.belongsToMany(models.TimeFrame, {
       through: models.ClassTime,
+      as: 'timeFrame',
       foreignKey: 'idClass',
       onDelete: 'SET NULL',
     });
@@ -65,10 +66,15 @@ module.exports = (sequelize, Sequelize) => {
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE',
     });
+    // Class.hasMany(models.Testing, {
+    //   foreignKey: 'idClass',
+    //   onDelete: 'SET NULL',
+    // });
     Class.hasMany(models.ClassTime, {
       foreignKey: 'idClass',
       onDelete: 'SET NULL',
     });
+
     Class.belongsTo(models.Course, {
       foreignKey: 'idCourse',
       onDelete: 'SET NULL',
@@ -76,14 +82,9 @@ module.exports = (sequelize, Sequelize) => {
     Class.hasMany(models.Exam, {
       foreignKey: 'idClass',
     });
-    Class.belongsToMany(models.Bill, {
-      through: models.BillInfo,
+    Class.hasMany(models.BillInfo, {
       foreignKey: 'idClass',
-      onDelete: 'CASCADE',
     });
-    // Class.belongsTo(models.Center, {
-    //   foreignKey: 'idCenter',
-    // });
   };
   return Class;
 };

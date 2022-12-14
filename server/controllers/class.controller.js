@@ -4,11 +4,14 @@ const {
   Course,
   Student,
   Exam,
+  Teaching,
   ClassTime,
   Lecturer,
   User,
+  Testing,
   Column_Transcript,
 } = require('../models');
+const Sequelize = require('sequelize');
 
 const create = (req, res) => {
   // Validate request
@@ -70,6 +73,7 @@ const findAll = (req, res) => {
           },
         ],
       },
+      // { model: Testing },
       {
         model: Lecturer,
         include: [
@@ -78,7 +82,9 @@ const findAll = (req, res) => {
           },
         ],
       },
-
+      {
+        model: Student,
+      },
       {
         model: ClassTime,
         include: [
@@ -108,9 +114,6 @@ const findOne = (req, res) => {
 
   Class.findByPk(idClass, {
     include: [
-      {
-        model: TimeFrame,
-      },
       {
         model: Course,
         include: [
@@ -144,9 +147,17 @@ const findOne = (req, res) => {
             model: User,
           },
           {
-            model: Exam,
+            model: Testing,
+            include: [
+              {
+                model: Exam,
+              },
+            ],
           },
         ],
+      },
+      {
+        model: Student,
       },
     ],
   })
@@ -160,38 +171,8 @@ const findOne = (req, res) => {
       }
     })
     .catch(err => {
-      res.status(500).send(err.message);
-    });
-};
-
-// Find classes by idLecturer
-const findByIdLecturer = (req, res) => {
-  const { idLecturer } = req.params;
-  Class.findAll({
-    include: [
-      {
-        model: Lecturer,
-        where: { idLecturer: idLecturer },
-        include: [
-          {
-            model: User,
-          },
-        ],
-      },
-      {
-        model: Course,
-      },
-      {
-        model: TimeFrame,
-      },
-    ],
-  })
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
       res.status(500).send({
-        message: err.message || 'Some error occurred while retrieving Class.',
+        message: 'Error retrieving Class with idclass=' + idClass,
       });
     });
 };
@@ -275,12 +256,9 @@ const update = async (req, res) => {
 const remove = (req, res) => {
   const idClass = req.params.idClass;
 
-  Class.update(
-    { isDeleted: true },
-    {
-      where: { idCourse: idCourse },
-    }
-  )
+  Class.destroy({
+    where: { idClass: idClass },
+  })
     .then(num => {
       if (num == 1) {
         res.send({
@@ -318,4 +296,4 @@ const findByIdCourse = (req, res) => {
     });
 };
 
-module.exports = { create, findAll, findOne, update, remove, findByIdCourse, findByIdLecturer };
+module.exports = { create, findAll, findOne, update, remove, findByIdCourse };
