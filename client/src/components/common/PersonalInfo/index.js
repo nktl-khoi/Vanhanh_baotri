@@ -5,20 +5,24 @@ import styles from './index.module.less';
 
 const { Option } = Select;
 
-const PersonalInfo = props => {
+const PersonalInfo = () => {
   const [address, setAddress] = useState({});
-  const dateFormat = 'DD/MM/YYYY';
 
-  const validateMessages = {
-    required: '${label} is required!',
-    types: {
-      email: '${label} is not validate email!',
-      number: '${label} is a validate number!',
-    },
-  };
+  const dateFormat = 'DD/MM/YYYY';
   return (
     <Card>
-      <Form layout="vertical" validateMessages={validateMessages}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
+        <h3>Personal information</h3>
+        <div>
+          <Button className={styles.btn} size="large" style={{ marginRight: '20px' }}>
+            Discard
+          </Button>
+          <Button className={styles.btn} size="large" type="primary">
+            Add employee
+          </Button>
+        </div>
+      </div>
+      <Form layout="vertical">
         <Row gutter={20}>
           <Col span={16}>
             <Form.Item label="Full name" name="fullName" rules={[{ required: true }]}>
@@ -49,15 +53,12 @@ const PersonalInfo = props => {
           </Col>
 
           <Col span={8}>
-            <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email' }]}>
+            <Form.Item label="Email" name="email" rules={[{ required: true }]}>
               <Input />
             </Form.Item>
           </Col>
         </Row>
-        <ProvincePicker
-          address={address}
-          callbackChanges={setAddress}
-          rules={[{ required: true }]}></ProvincePicker>
+        <ProvincePicker address={address} callbackChanges={setAddress}></ProvincePicker>
       </Form>
     </Card>
   );
