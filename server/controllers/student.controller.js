@@ -1,5 +1,4 @@
-const { test } = require('../config/db.config');
-const { Student, User, Class, Exam, Testing } = require('../models');
+const { Student, User, Class, Testing } = require('../models');
 
 const create = async (req, res) => {
   try {
@@ -25,18 +24,12 @@ const create = async (req, res) => {
     // Save Student in the database
     const newStudent = await Student.create({ idUser: newUser.idUser });
 
-    const response = await Student.findByPk(newStudent.idStudent, {
-      include: [
-        { model: User },
-        {
-          model: Class,
-        },
-        {
-          model: Exam,
-          include: [{ model: Class }],
-        },
-      ],
-    });
+    const response = {
+      idStudent: newStudent.idStudent,
+      isDeleted: newStudent.isDeleted,
+      idUser: newStudent.idUser,
+      User: newUser,
+    };
     res.status(200).send(response);
   } catch (err) {
     res.status(500).send({
@@ -54,17 +47,7 @@ const findAll = (req, res) => {
         model: Class,
         as: 'Classes',
       },
-      {
-        model: Exam,
-        include: [{ model: Class }],
-      },
-      {
-        model: Testing,
-      },
     ],
-    where: {
-      isDeleted: false,
-    },
   })
     .then(data => {
       res.send(data);
@@ -81,15 +64,12 @@ const findOne = (req, res) => {
   const idStudent = req.params.idStudent;
 
   Student.findOne({
-    where: { idStudent: idStudent },
+    where: { isDeleted: false, idStudent: idStudent },
     include: [
       { model: User },
       {
         model: Class,
-      },
-      {
-        model: Exam,
-        include: [{ model: Class }],
+        as: 'Classes',
       },
     ],
   })
