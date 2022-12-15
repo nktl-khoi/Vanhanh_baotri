@@ -2,10 +2,12 @@ const {
   Class,
   TimeFrame,
   Course,
+  CourseType,
   Student,
   Exam,
   ClassTime,
   Lecturer,
+  Level,
   User,
   Column_Transcript,
 } = require('../models');
@@ -120,6 +122,12 @@ const findOne = (req, res) => {
             model: Column_Transcript,
             as: 'Columns',
           },
+          {
+            model: CourseType,
+          },
+          {
+            model: Level,
+          },
         ],
       },
       {
@@ -188,6 +196,9 @@ const findByIdLecturer = (req, res) => {
       },
       {
         model: TimeFrame,
+      },
+      {
+        model: Student,
       },
     ],
   })
@@ -283,7 +294,7 @@ const remove = (req, res) => {
   Class.update(
     { isDeleted: true },
     {
-      where: { idCourse: idCourse },
+      where: { idClass: idClass },
     }
   )
     .then(num => {
