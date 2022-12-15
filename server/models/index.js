@@ -11,12 +11,6 @@ const sequelize = new Sequelize(
     host: dbConfig.development.host,
     dialect: 'postgres',
     protocol: 'postgres',
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false,
-      },
-    },
   }
 );
 
