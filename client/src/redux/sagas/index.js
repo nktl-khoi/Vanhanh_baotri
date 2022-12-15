@@ -1,36 +1,40 @@
 import { takeLatest } from 'redux-saga/effects';
-
-import * as postActions from '../actions/posts';
-import * as studentActions from '../actions/students';
-import * as levelActions from 'redux/actions/levels';
+import * as postActions from 'redux/actions/posts';
+import * as courseActions from 'redux/actions/courses';
 import * as courseTypeActions from 'redux/actions/courseTypes';
-import { fetchPostsSaga, updatePostSaga, deletePostSaga, createPostSaga } from './posts';
+import * as levelActions from 'redux/actions/levels';
+import { fetchPostsSaga, updatePostSaga, deletePostSaga, createPostSaga } from 'redux/sagas/posts';
+import { fetchCourses, createCourse, updateCourse, deleteCourse } from 'redux/sagas/courses';
 import {
-  fetchStudentsSaga,
-  createStudentsSaga,
-  updateStudentsSaga,
-  deleteStudentsSaga,
-  getStudentByIdSaga,
-} from './students';
-import { fetchLevelsSaga } from './levels';
-import { fetchCourseTypesSaga } from './courseTypes';
+  fetchCourseTypes,
+  createCourseType,
+  updateCourseType,
+  deleteCourseType,
+} from 'redux/sagas/courseTypes';
+import { fetchLevels, createLevel, updateLevel, deleteLevel } from 'redux/sagas/levels';
 
 export default function* mySaga() {
+  //level
+  yield takeLatest(levelActions.getLevels.getLevelsRequest, fetchLevels);
+  yield takeLatest(levelActions.createLevel.createLevelRequest, createLevel);
+  yield takeLatest(levelActions.updateLevel.updateLevelRequest, updateLevel);
+  yield takeLatest(levelActions.deleteLevel.deleteLevelRequest, deleteLevel);
+
+  //course types
+  yield takeLatest(courseTypeActions.getCourseTypes.getCourseTypesRequest, fetchCourseTypes);
+  yield takeLatest(courseTypeActions.createCourseType.createCourseTypeRequest, createCourseType);
+  yield takeLatest(courseTypeActions.updateCourseType.updateCourseTypeRequest, updateCourseType);
+  yield takeLatest(courseTypeActions.deleteCourseType.deleteCourseTypeRequest, deleteCourseType);
+
+  //courses
+  yield takeLatest(courseActions.getCourses.getCoursesRequest, fetchCourses);
+  yield takeLatest(courseActions.createCourse.createCourseRequest, createCourse);
+  yield takeLatest(courseActions.updateCourse.updateCourseRequest, updateCourse);
+  yield takeLatest(courseActions.deleteCourse.deleteCourseRequest, deleteCourse);
+
   // posts
   yield takeLatest(postActions.getPosts.getPostsRequest, fetchPostsSaga);
   yield takeLatest(postActions.createPost.createPostRequest, createPostSaga);
   yield takeLatest(postActions.updatePost.updatePostRequest, updatePostSaga);
   yield takeLatest(postActions.deletePost.deletePostRequest, deletePostSaga);
-
-  //students
-  yield takeLatest(studentActions.getStudents.getStudentsRequest, fetchStudentsSaga);
-  yield takeLatest(studentActions.createStudents.createStudentsRequest, createStudentsSaga);
-  yield takeLatest(studentActions.updateStudents.updateStudentsRequest, updateStudentsSaga);
-  yield takeLatest(studentActions.deleteStudents.deleteStudentsRequest, deleteStudentsSaga);
-  yield takeLatest(studentActions.getById.getByIdRequest, getStudentByIdSaga);
-
-  //Levels
-  yield takeLatest(levelActions.getLevels.getLevelsRequest, fetchLevelsSaga);
-  //Course type
-  yield takeLatest(courseTypeActions.getCourseTypes.getCourseTypesRequest, fetchCourseTypesSaga);
 }

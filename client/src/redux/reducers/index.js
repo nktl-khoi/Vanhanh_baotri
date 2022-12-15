@@ -1,16 +1,14 @@
 import { combineReducers } from 'redux';
 import postsReducer from './posts';
 import employesReducer from './employes';
-import StudentsReducer from './students';
-import LevelsReducer from './level';
-import CourseTypesReducer from './courseTypes';
-import StudentByIdReducer from './studentById';
+import coursesReducer from 'redux/reducers/courses';
+import courseTypesReducer from 'redux/reducers/courseType';
+import levelsReducer from './level';
 
 export default combineReducers({
   posts: postsReducer,
-  employes: employesReducer,
-  students: StudentsReducer,
-  levels: LevelsReducer,
-  courseTypes: CourseTypesReducer,
-  studentById: StudentByIdReducer,
+  employees: employesReducer,
+  courses: coursesReducer,
+  courseTypes: courseTypesReducer,
+  levels: levelsReducer,
 });

@@ -8,22 +8,20 @@ const INIT_STATE = {
     data: [],
     isLoading: false,
   },
-  students: {
+  courses: {
     data: [],
     isLoading: false,
-  },
-  studentById: {
-    //Student is get with id
-    data: [],
-    isLoading: false,
-  },
-  levels: {
-    data: [],
-    isLoading: false,
+    isSuccess: false,
   },
   courseTypes: {
     data: [],
     isLoading: false,
+    isSuccess: false,
+  },
+  levels: {
+    data: [],
+    isLoading: false,
+    isSuccess: false,
   },
 };
 
