@@ -39,6 +39,9 @@ require('./routes/parameter.routes.js')(app);
 require('./routes/auth.routes.js')(app);
 require('./routes/report.routes.js')(app);
 
+app.get('/', (req, res) => {
+  res.status(200).json('Lang center');
+});
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
