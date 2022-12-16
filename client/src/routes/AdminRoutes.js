@@ -6,18 +6,32 @@ import AddCourse from 'pages/Course/AddCourse';
 import CourseType from 'pages/Course/CourseType';
 import Level from 'pages/Course/Level';
 import Dashboard from 'pages/Dashboard';
+import lecturerIcon from 'assets/svg/lecturer.svg';
+import Lecturer from 'pages/Lecturer';
+import Student from 'pages/Student';
+import AddStudent from 'pages/Student/AddStudent';
+
+const PandaIcon = props => <Icon component={svg} {...props} />;
+import AddLecturer from 'pages/Lecturer/AddLecturer';
 import Employee from 'pages/Employee';
 import AddEmployee from 'pages/Employee/AddEmployee';
-import Lecturer from 'pages/Lecturer';
-import AddLecturer from 'pages/Lecturer/AddLecturer';
+import TimeFrame from 'pages/TimeFrame';
 import React from 'react';
-import { classSvg, courseSvg, dashboardSvg, employeeSvg, lecturerSvg } from 'utils/iconsvg';
+import {
+  classSvg,
+  courseSvg,
+  dashboardSvg,
+  employeeSvg,
+  lecturerSvg,
+  timeSvg,
+} from 'utils/iconsvg';
 
 const DashboardIcon = props => <Icon component={dashboardSvg} {...props} />;
 const LecturerIcon = props => <Icon component={lecturerSvg} {...props} />;
 const CourseIcon = props => <Icon component={courseSvg} {...props} />;
 const EmployeeIcon = props => <Icon component={employeeSvg} {...props} />;
 const ClassIcon = props => <Icon component={classSvg} {...props} />;
+const TimeFrameIcon = props => <Icon component={timeSvg} {...props} />;
 
 const adminRoutes = [
   {
@@ -34,6 +48,21 @@ const adminRoutes = [
     path: '/lecturer/add',
     exact: true,
     page: () => <AddLecturer />,
+  },
+  {
+    path: '/student/list',
+    exact: true,
+    page: () => <Student />,
+  },
+  {
+    path: '/student/add',
+    exact: true,
+    page: () => <AddStudent />,
+  },
+  {
+    path: '/student/edit/:idStudent',
+    exact: true,
+    page: () => <AddStudent />,
   },
   {
     path: '/course/',
@@ -81,6 +110,11 @@ const adminRoutes = [
     page: () => <AddEmployee />,
   },
   {
+    path: '/time-frame',
+    exact: true,
+    page: () => <TimeFrame />,
+  },
+  {
     path: '/class/',
     exact: true,
     page: () => <Class />,
@@ -92,6 +126,11 @@ const adminRoutes = [
   },
   {
     path: '/class/add/:idClass',
+    exact: true,
+    page: () => <AddClass />,
+  },
+  {
+    path: '/class/update/:idClass',
     exact: true,
     page: () => <AddClass />,
   },
@@ -119,6 +158,17 @@ const adminMenuItems = {
           path: '/lecturer/add',
           name: 'Add lecturer',
           component: <AddLecturer />,
+        },
+      ],
+    },
+    {
+      name: 'Student',
+      icon: <LecturerIcon></LecturerIcon>,
+      routes: [
+        {
+          path: '/student/list',
+          name: 'Student list',
+          component: <Student />,
         },
       ],
     },
@@ -163,6 +213,12 @@ const adminMenuItems = {
           component: <AddEmployee />,
         },
       ],
+    },
+    {
+      path: '/time-frame',
+      name: 'Time Frame',
+      icon: <TimeFrameIcon />,
+      component: <TimeFrame />,
     },
     {
       name: 'Class',

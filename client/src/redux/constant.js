@@ -19,6 +19,23 @@ const INIT_STATE = {
     data: [],
     isLoading: false,
   },
+  students: {
+    data: [],
+    isLoading: false,
+    isSuccess: false,
+    error: '',
+  },
+  timeFrames: {
+    data: [],
+    isLoading: false,
+    isSuccess: false,
+    error: '',
+  },
+  studentById: {
+    //Student is get with id
+    data: [],
+    isLoading: false,
+  },
   courses: {
     data: [],
     isLoading: false,
@@ -30,6 +47,10 @@ const INIT_STATE = {
     isSuccess: false,
   },
   levels: {
+    data: [],
+    isLoading: false,
+  },
+  courseTypes: {
     data: [],
     isLoading: false,
     isSuccess: false,
