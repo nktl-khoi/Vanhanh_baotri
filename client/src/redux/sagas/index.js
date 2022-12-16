@@ -1,31 +1,29 @@
-import { takeLatest, takeEvery } from 'redux-saga/effects';
-
-import * as postActions from '../actions/posts';
-import * as userActions from '../actions/users';
-import * as authActions from '../actions/auth';
-import { fetchPostsSaga, updatePostSaga, deletePostSaga, createPostSaga } from './posts';
-import {
-  fetchUsersSaga,
-  fetchUserSaga,
-  updateUserSaga,
-  deleteUserSaga,
-  createUserSaga,
-} from './users';
-import { fetchAuthSaga } from './auth';
 import { takeLatest } from 'redux-saga/effects';
-import * as postActions from 'redux/actions/posts';
 import * as courseActions from 'redux/actions/courses';
 import * as courseTypeActions from 'redux/actions/courseTypes';
 import * as levelActions from 'redux/actions/levels';
-import { fetchPostsSaga, updatePostSaga, deletePostSaga, createPostSaga } from 'redux/sagas/posts';
-import { fetchCourses, createCourse, updateCourse, deleteCourse } from 'redux/sagas/courses';
+import { createCourse, deleteCourse, fetchCourses, updateCourse } from 'redux/sagas/courses';
 import {
-  fetchCourseTypes,
   createCourseType,
-  updateCourseType,
   deleteCourseType,
+  fetchCourseTypes,
+  updateCourseType,
 } from 'redux/sagas/courseTypes';
-import { fetchLevels, createLevel, updateLevel, deleteLevel } from 'redux/sagas/levels';
+import { createLevel, deleteLevel, fetchLevels, updateLevel } from 'redux/sagas/levels';
+import * as authActions from '../actions/auth';
+import * as classActions from '../actions/classes';
+import * as postActions from '../actions/posts';
+import * as userActions from '../actions/users';
+import { fetchAuthSaga } from './auth';
+import { createClass, deleteClass, fetchClasses, updateClass } from './classes';
+import { createPostSaga, deletePostSaga, fetchPostsSaga, updatePostSaga } from './posts';
+import {
+  createUserSaga,
+  deleteUserSaga,
+  fetchUserSaga,
+  fetchUsersSaga,
+  updateUserSaga,
+} from './users';
 
 export default function* mySaga() {
   //level
@@ -59,4 +57,9 @@ export default function* mySaga() {
   yield takeLatest(userActions.deleteUser.deleteUserRequest, deleteUserSaga);
   //auth
   yield takeLatest(authActions.getAuth.getAuthRequest, fetchAuthSaga);
+  //classes
+  yield takeLatest(classActions.getClasses.getClassesRequest, fetchClasses);
+  yield takeLatest(classActions.createClass.createClassRequest, createClass);
+  yield takeLatest(classActions.updateClass.updateClassRequest, updateClass);
+  yield takeLatest(classActions.deleteClass.deleteClassRequest, deleteClass);
 }
