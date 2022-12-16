@@ -32,6 +32,7 @@ const AddStudent = () => {
           width: 300,
         },
       });
+      formRef.current.resetFields();
       if (idStudent) {
         history.push('/student/list');
       }
@@ -58,7 +59,7 @@ const AddStudent = () => {
       setStudentById(student);
       loadFieldsValue(student);
     }
-  }, [students]);
+  }, [students.data]);
 
   const loadFieldsValue = student => {
     const record = {
@@ -84,7 +85,7 @@ const AddStudent = () => {
       gender: gender === 'female' ? 0 : gender === 'male' ? 1 : 2,
       phoneNumber,
       email,
-      dob: dob.format('DD/MM/YYYY'),
+      dob: dob.format('MM / DD / YYYY'),
       address: [detailsAddress, district, city],
     };
     if (!idStudent) {
@@ -140,11 +141,7 @@ const AddStudent = () => {
             </Button>
           </Col>
           <Col span={3}>
-            <Button
-              className={style['btn-add']}
-              htmlType="submit"
-              size="large"
-              loading={students.isLoading}>
+            <Button className={style['btn-add']} htmlType="submit" size="large">
               {contentControl.btnSave}
             </Button>
           </Col>

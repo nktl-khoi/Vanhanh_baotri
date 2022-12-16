@@ -3,18 +3,16 @@ import Class from 'pages/Class';
 import AddClass from 'pages/Class/AddClass';
 import Course from 'pages/Course';
 import AddCourse from 'pages/Course/AddCourse';
+import ColumnTranscript from 'pages/Course/ColumnTranscript';
 import CourseType from 'pages/Course/CourseType';
 import Level from 'pages/Course/Level';
 import Dashboard from 'pages/Dashboard';
-import lecturerIcon from 'assets/svg/lecturer.svg';
-import Lecturer from 'pages/Lecturer';
-import Student from 'pages/Student';
-import AddStudent from 'pages/Student/AddStudent';
-
-const PandaIcon = props => <Icon component={svg} {...props} />;
-import AddLecturer from 'pages/Lecturer/AddLecturer';
 import Employee from 'pages/Employee';
 import AddEmployee from 'pages/Employee/AddEmployee';
+import Lecturer from 'pages/Lecturer';
+import AddLecturer from 'pages/Lecturer/AddLecturer';
+import Student from 'pages/Student';
+import AddStudent from 'pages/Student/AddStudent';
 import TimeFrame from 'pages/TimeFrame';
 import React from 'react';
 import {
@@ -23,6 +21,7 @@ import {
   dashboardSvg,
   employeeSvg,
   lecturerSvg,
+  studentSvg,
   timeSvg,
 } from 'utils/iconsvg';
 
@@ -32,6 +31,7 @@ const CourseIcon = props => <Icon component={courseSvg} {...props} />;
 const EmployeeIcon = props => <Icon component={employeeSvg} {...props} />;
 const ClassIcon = props => <Icon component={classSvg} {...props} />;
 const TimeFrameIcon = props => <Icon component={timeSvg} {...props} />;
+const StudentIcon = props => <Icon component={studentSvg} {...props} />;
 
 const adminRoutes = [
   {
@@ -75,7 +75,7 @@ const adminRoutes = [
     page: () => <AddCourse />,
   },
   {
-    path: '/course/add/:idCourse',
+    path: '/course/edit/:idCourse',
     exact: true,
     page: () => <AddCourse />,
   },
@@ -98,6 +98,19 @@ const adminRoutes = [
     path: '/level/:idLevel',
     exact: true,
     page: () => <Level />,
+    path: '/lecturer/edit/:id',
+    exact: true,
+    page: () => <AddLecturer />,
+  },
+  {
+    path: '/columntranscript',
+    exact: true,
+    page: () => <ColumnTranscript />,
+  },
+  {
+    path: '/columntranscript/:idColumn',
+    exact: true,
+    page: () => <ColumnTranscript />,
   },
   {
     path: '/employee/',
@@ -133,6 +146,9 @@ const adminRoutes = [
     path: '/class/update/:idClass',
     exact: true,
     page: () => <AddClass />,
+    path: '/employee/edit/:id',
+    exact: true,
+    page: () => <AddEmployee />,
   },
 ];
 
@@ -154,16 +170,11 @@ const adminMenuItems = {
           name: 'Lecturer list',
           component: <Lecturer />,
         },
-        {
-          path: '/lecturer/add',
-          name: 'Add lecturer',
-          component: <AddLecturer />,
-        },
       ],
     },
     {
       name: 'Student',
-      icon: <LecturerIcon></LecturerIcon>,
+      icon: <StudentIcon />,
       routes: [
         {
           path: '/student/list',
@@ -182,11 +193,6 @@ const adminMenuItems = {
           component: <Course />,
         },
         {
-          path: '/course/add',
-          name: 'Add course',
-          component: <AddCourse />,
-        },
-        {
           path: '/coursetype/',
           name: 'Course type',
           component: <CourseType />,
@@ -195,6 +201,11 @@ const adminMenuItems = {
           path: '/level/',
           name: 'Level',
           component: <Level />,
+        },
+        {
+          path: '/columntranscript/',
+          name: 'Column transcript',
+          component: <ColumnTranscript />,
         },
       ],
     },
@@ -206,11 +217,6 @@ const adminMenuItems = {
           path: '/employee/',
           name: 'Employee list',
           component: <Employee />,
-        },
-        {
-          path: '/employee/add',
-          name: 'Add Employee',
-          component: <AddEmployee />,
         },
       ],
     },

@@ -1,7 +1,14 @@
 import { takeLatest } from 'redux-saga/effects';
+import * as columnTranscriptActions from 'redux/actions/columnTranscripts';
 import * as courseActions from 'redux/actions/courses';
 import * as courseTypeActions from 'redux/actions/courseTypes';
 import * as levelActions from 'redux/actions/levels';
+import {
+  createColumnTranscript,
+  deleteColumnTranscript,
+  fetchColumnTranscripts,
+  updateColumnTranscript,
+} from 'redux/sagas/columnTranscripts';
 import { createCourse, deleteCourse, fetchCourses, updateCourse } from 'redux/sagas/courses';
 import {
   createCourseType,
@@ -12,28 +19,18 @@ import {
 import { createLevel, deleteLevel, fetchLevels, updateLevel } from 'redux/sagas/levels';
 import * as authActions from '../actions/auth';
 import * as classActions from '../actions/classes';
-import * as postActions from '../actions/posts';
 import * as studentActions from '../actions/students';
-
-import * as userActions from '../actions/users';
 import * as timeFrameActions from '../actions/timeFrames';
-import { fetchPostsSaga, updatePostSaga, deletePostSaga, createPostSaga } from './posts';
+import * as userActions from '../actions/users';
 import { fetchAuthSaga } from './auth';
 import { createClass, deleteClass, fetchClasses, updateClass } from './classes';
 import {
-  fetchStudentsSaga,
   createStudentsSaga,
-  updateStudentsSaga,
   deleteStudentsSaga,
+  fetchStudentsSaga,
   getStudentByIdSaga,
+  updateStudentsSaga,
 } from './students';
-import {
-  fetchUsersSaga,
-  createUserSaga,
-  deleteUserSaga,
-  fetchUserSaga,
-  updateUserSaga,
-} from './users';
 import {
   createTimeFrameSaga,
   deleteTimeFrameSaga,
@@ -41,8 +38,33 @@ import {
   fetchTimeFramesSaga,
   updateTimeFrameSaga,
 } from './timeFrames';
+import {
+  createUserSaga,
+  deleteUserSaga,
+  fetchUserSaga,
+  fetchUsersSaga,
+  updateUserSaga,
+} from './users';
 
 export default function* mySaga() {
+  //column transcript
+  yield takeLatest(
+    columnTranscriptActions.getColumnTranscripts.getColumnTranscriptsRequest,
+    fetchColumnTranscripts
+  );
+  yield takeLatest(
+    columnTranscriptActions.createColumnTranscript.createColumnTranscriptRequest,
+    createColumnTranscript
+  );
+  yield takeLatest(
+    columnTranscriptActions.updateColumnTranscript.updateColumnTranscriptRequest,
+    updateColumnTranscript
+  );
+  yield takeLatest(
+    columnTranscriptActions.deleteColumnTranscript.deleteColumnTranscriptRequest,
+    deleteColumnTranscript
+  );
+
   //level
   yield takeLatest(levelActions.getLevels.getLevelsRequest, fetchLevels);
   yield takeLatest(levelActions.createLevel.createLevelRequest, createLevel);
@@ -60,12 +82,6 @@ export default function* mySaga() {
   yield takeLatest(courseActions.createCourse.createCourseRequest, createCourse);
   yield takeLatest(courseActions.updateCourse.updateCourseRequest, updateCourse);
   yield takeLatest(courseActions.deleteCourse.deleteCourseRequest, deleteCourse);
-
-  // posts
-  yield takeLatest(postActions.getPosts.getPostsRequest, fetchPostsSaga);
-  yield takeLatest(postActions.createPost.createPostRequest, createPostSaga);
-  yield takeLatest(postActions.updatePost.updatePostRequest, updatePostSaga);
-  yield takeLatest(postActions.deletePost.deletePostRequest, deletePostSaga);
 
   //students
   yield takeLatest(studentActions.getStudents.getStudentsRequest, fetchStudentsSaga);
@@ -93,4 +109,15 @@ export default function* mySaga() {
   yield takeLatest(classActions.createClass.createClassRequest, createClass);
   yield takeLatest(classActions.updateClass.updateClassRequest, updateClass);
   yield takeLatest(classActions.deleteClass.deleteClassRequest, deleteClass);
+  // employees
+  yield takeLatest(employeeActions.getEmployees.getEmployeesRequest, fetchEmployeesSaga);
+  yield takeLatest(employeeActions.createEmployee.createEmployeeRequest, createEmployeeSaga);
+  yield takeLatest(employeeActions.updateEmployee.updateEmployeeRequest, updateEmployeeSaga);
+  yield takeLatest(employeeActions.deleteEmployee.deleteEmployeeRequest, deleteEmployeeSaga);
+
+  // lecturers
+  yield takeLatest(lecturerActions.getLecturers.getLecturersRequest, fetchLecturersSaga);
+  yield takeLatest(lecturerActions.createLecturer.createLecturerRequest, createLecturerSaga);
+  yield takeLatest(lecturerActions.updateLecturer.updateLecturerRequest, updateLecturerSaga);
+  yield takeLatest(lecturerActions.deleteLecturer.deleteLecturerRequest, deleteLecturerSaga);
 }
