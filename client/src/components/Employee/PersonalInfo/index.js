@@ -1,32 +1,39 @@
-import { Button, Card, Col, DatePicker, Form, Input, Row, Select } from 'antd';
+import { Button, Card, Col, DatePicker, Form, Input, message, Row, Select } from 'antd';
+import moment from 'moment';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router';
-import { employeeState$, usersState$ } from 'redux/selectors';
-import ProvincePicker from '../ProvincePicker';
+import { useHistory, useParams } from 'react-router';
 import * as employeeActions from 'redux/actions/employees';
-import styles from './index.module.less';
 import { getUsers } from 'redux/actions/users';
-import moment from 'moment';
+import { employeeState$, usersState$ } from 'redux/selectors';
+import { converToUser } from 'utils';
+import { checkUsernameIsExist, loadFieldsValue } from 'utils/loadFieldsValueForUser';
+import ProvincePicker from '../../common/ProvincePicker';
+import styles from './index.module.less';
+import { dateValidator } from 'utils/validator';
 
 const { Option } = Select;
-const idRoleEmployee = '386af797-fdf6-42dc-8bab-d5b42561b5fb';
+const idRoleEmployee = '0a15d8a4-e1a1-4fc1-ba7a-157b34959289';
 
 const PersonalInfo = props => {
   const [isSubmit, setIsSubmit] = useState(false);
   const [city, setCity] = useState('');
+  const history = useHistory();
   const dispatch = useDispatch();
   const employees = useSelector(employeeState$);
   const users = useSelector(usersState$);
   const [form] = Form.useForm();
   const { id } = useParams();
   const dateFormat = 'DD/MM/YYYY';
-
+  const { typeSubmit } = props;
   const validateMessages = {
     required: '${label} is required!',
     types: {
       email: '${label} is not validate email!',
-      number: '${label} is a validate number!',
+      number: '${label} is not a validate number!',
+    },
+    number: {
+      range: '${label} must be between ${min} and ${max}',
     },
     string: {
       len: "'${label}' must be exactly ${len} characters",
@@ -51,6 +58,7 @@ const PersonalInfo = props => {
       password,
       confirmPassword,
     } = data;
+    data.imageUrl = props.imgUrl;
 
     const currentDate = moment();
     if (currentDate < dob) {
@@ -71,23 +79,17 @@ const PersonalInfo = props => {
         city
       ) {
         if (typeSubmit === 'create') {
-          if (!checkUsernameIsExist(username)) {
-            const createdEmployee = {
-              displayName,
-              gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
-              dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
-              phoneNumber,
-              email,
-              address: [detailsAddress, district, city],
-              idRole: idRoleEmployee,
-              imageUrl: 'test',
-              username,
-              password,
-              isActivated: true,
-            };
-            dispatch(employeeActions.createEmployee.createEmployeeRequest(createdEmployee));
-            setCity(city);
-            setIsSubmit(true);
+          if (!checkUsernameIsExist(users, username)) {
+            // check confirm password
+            if (confirmPassword !== password) {
+              setIsSubmit(true);
+              message.error('Confirm password does not match');
+            } else {
+              const createdEmployee = converToUser(data, idRoleEmployee);
+              dispatch(employeeActions.createEmployee.createEmployeeRequest(createdEmployee));
+              setCity(city);
+              setIsSubmit(true);
+            }
           } else {
             setIsSubmit(true);
             isSubmit === true ? message.error('Username is exist!') : '';
@@ -99,20 +101,14 @@ const PersonalInfo = props => {
       if (typeSubmit === 'edit') {
         const employee = employees.data.find(employee => employee.idEmployee === id);
 
-        const editedEmployee = {
-          displayName,
-          gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
-          dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
-          idEmployee: id,
-          address: [detailsAddress, district, city],
+        const editedValue = {
+          ...data,
           idUser: employee.idUser,
-          username: employee.username,
-          password: employee.password,
-          isDeleted: employee.isDeleted,
-          isActivated: employee.isActivated,
-          imageUrl: employee.imageUrl,
-          idRole: idRoleEmployee,
+          username: employee.User.username,
+          password: employee.User.password,
+          imageUrl: props.imgUrl,
         };
+        const editedEmployee = converToUser(editedValue, idRoleEmployee);
         dispatch(employeeActions.updateEmployee.updateEmployeeRequest(editedEmployee));
         setCity(city);
         setIsSubmit(true);
@@ -120,58 +116,27 @@ const PersonalInfo = props => {
     }
   };
 
-  const checkUsernameIsExist = username => {
-    const result = users.data.find(user => user.username === username);
-    // result === empty => checkUsernameIsExist: false
-    return !isEmpty(result);
-  };
-
-  const dobValidator = (rule, value, callback) => {
-    try {
-      if (value > Date.now()) {
-        callback('Date of birth is not greater than current date');
-      } else {
-        callback();
-      }
-    } catch {
-      callback();
-    }
-  };
-
   // Load information employee to form
   React.useEffect(() => {
-    if (id) {
-      const employee =
-        employees.data && employees.data.find(employee => employee.idEmployee === id);
-
-      if (employee) {
-        const editedEmployee = {
-          displayName: employee.displayName,
-          gender: employee.gender === 0 ? 'male' : employee.gender === 1 ? 'female' : 'others',
-          dob: moment(employee.dob),
-          phoneNumber: employee.phoneNumber,
-          address: employee.address,
-          email: employee.email,
-          detailsAddress: employee.address[0],
-          district: employee.address[1],
-          city: employee.address[2],
-        };
-        form.setFieldsValue(editedEmployee);
-        setCity(employee.address[2]);
-      }
+    if (id && employees.data.length !== 0) {
+      const employee = employees.data.find(employee => employee.idEmployee === id);
+      loadFieldsValue(employee, setCity, form, props.setImgUrl);
     }
-  }, [id, employees]);
+  }, [employees.data]);
 
   // Redirect to employee list
   React.useEffect(() => {
     if (employees.isSuccess && isSubmit) {
-      id
-        ? message.success('Update employee success!')
-        : message.success('Create employee success!');
-
+      if (id) {
+        message.success('Update employee success!');
+        history.push('/employee');
+      } else {
+        message.success('Create employee success!');
+      }
       form.resetFields();
+      props.setImgUrl(null);
     }
-  }, [employees]);
+  }, [employees, history]);
 
   React.useEffect(() => {
     dispatch(employeeActions.getEmployees.getEmployeesRequest());
@@ -180,14 +145,14 @@ const PersonalInfo = props => {
 
   return (
     <Card>
-      <Form layout="vertical" validateMessages={validateMessages}>
+      <h3>Personal information</h3>
+      <Form form={form} layout="vertical" validateMessages={validateMessages}>
         <Row gutter={20}>
           <Col xs={24} md={24} xl={10} lg={12} xl={12}>
             <Form.Item label="Full name" name="displayName" rules={[{ required: true }]}>
               <Input placeholder="Full name" />
             </Form.Item>
           </Col>
-
           <Col xs={12} md={12} xl={4} lg={6} xl={6}>
             <Form.Item label="Gender" name="gender" rules={[{ required: true }]}>
               <Select>
@@ -197,7 +162,6 @@ const PersonalInfo = props => {
               </Select>
             </Form.Item>
           </Col>
-
           <Col xs={12} md={12} xl={10} lg={6} xl={6}>
             <Form.Item
               label="DOB"
@@ -205,13 +169,12 @@ const PersonalInfo = props => {
               rules={[
                 { required: true },
                 {
-                  validator: dobValidator,
+                  validator: dateValidator,
                 },
               ]}>
               <DatePicker format={dateFormat} className={styles.maxwidth} />
             </Form.Item>
           </Col>
-
           <Col xs={12} md={12} lg={12} xl={8}>
             <Form.Item
               label="Phone number"
@@ -225,7 +188,6 @@ const PersonalInfo = props => {
               <Input type="text" placeholder="Phone number" maxLength="10" />
             </Form.Item>
           </Col>
-
           <Col xs={12} md={12} lg={12} xl={8}>
             <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email' }]}>
               <Input placeholder="Email" />
@@ -233,7 +195,6 @@ const PersonalInfo = props => {
           </Col>
         </Row>
         <ProvincePicker city={city} form={form} />
-
         {!id && (
           <Input.Group>
             <Row gutter={20}>
@@ -257,14 +218,14 @@ const PersonalInfo = props => {
                   rules={[
                     { required: true },
                     { min: 6 },
-                    ({ getFieldValue }) => ({
-                      validator(_, value) {
-                        if (!value || getFieldValue('password') === value) {
-                          return Promise.resolve();
-                        }
-                        return Promise.reject('Confirm password does not match!');
-                      },
-                    }),
+                    // ({ getFieldValue }) => ({
+                    //   validator(_, value) {
+                    //     if (!value || getFieldValue('password') === value) {
+                    //       return Promise.resolve();
+                    //     }
+                    //     return Promise.reject('Confirm password does not match!');
+                    //   },
+                    // }),
                   ]}>
                   <Input.Password placeholder="Confirm password" />
                 </Form.Item>
@@ -272,7 +233,6 @@ const PersonalInfo = props => {
             </Row>
           </Input.Group>
         )}
-
         <Form.Item>
           <Button onClick={handleSubmit} type="primary" htmlType="submit">
             Submit
