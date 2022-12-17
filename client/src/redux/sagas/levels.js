@@ -1,16 +1,8 @@
 import { call, put } from 'redux-saga/effects';
 import levelApi from 'api/levelApi';
 import * as levelActions from 'redux/actions/levels';
-import { takeLatest } from 'redux-saga/effects';
 
-export function* levelSaga() {
-  yield takeLatest(levelActions.getLevels.getLevelsRequest, fetchLevels);
-  yield takeLatest(levelActions.createLevel.createLevelRequest, createLevel);
-  yield takeLatest(levelActions.updateLevel.updateLevelRequest, updateLevel);
-  yield takeLatest(levelActions.deleteLevel.deleteLevelRequest, deleteLevel);
-}
-
-function* fetchLevels(action) {
+export function* fetchLevels(action) {
   try {
     const levels = yield call(levelApi.getAll);
 
@@ -20,7 +12,7 @@ function* fetchLevels(action) {
   }
 }
 
-function* createLevel(action) {
+export function* createLevel(action) {
   try {
     const newLevel = yield call(levelApi.create, action.payload);
 
@@ -30,7 +22,7 @@ function* createLevel(action) {
   }
 }
 
-function* updateLevel(action) {
+export function* updateLevel(action) {
   try {
     yield call(levelApi.update, action.payload);
     yield put(levelActions.updateLevel.updateLevelSuccess(action.payload));
@@ -39,7 +31,7 @@ function* updateLevel(action) {
   }
 }
 
-function* deleteLevel(action) {
+export function* deleteLevel(action) {
   try {
     yield call(levelApi.delete, action.payload);
 

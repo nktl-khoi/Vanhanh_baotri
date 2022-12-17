@@ -79,8 +79,7 @@ export default function employeesReducer(state = INIT_STATE.employees, action) {
         data: state.data.map(employee => {
           const idEmployee = action.payload.idEmployee;
           if (employee.idEmployee === idEmployee) {
-            employee.User.isActivated = false;
-            employee.isDeleted = true;
+            employee.isActivated = false;
           }
           return employee;
         }),

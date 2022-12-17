@@ -1,17 +1,8 @@
 import { call, put } from 'redux-saga/effects';
 import lecturerApi from '../../api/lecturerApi';
 import * as lecturerActions from '../actions/lecturers';
-import { takeLatest } from 'redux-saga/effects';
 
-export function* lecturerSaga() {
-  // lecturers
-  yield takeLatest(lecturerActions.getLecturers.getLecturersRequest, fetchLecturersSaga);
-  yield takeLatest(lecturerActions.createLecturer.createLecturerRequest, createLecturerSaga);
-  yield takeLatest(lecturerActions.updateLecturer.updateLecturerRequest, updateLecturerSaga);
-  yield takeLatest(lecturerActions.deleteLecturer.deleteLecturerRequest, deleteLecturerSaga);
-}
-
-function* fetchLecturersSaga(action) {
+export function* fetchLecturersSaga(action) {
   try {
     const lecturers = yield call(lecturerApi.getAll);
 
@@ -21,7 +12,7 @@ function* fetchLecturersSaga(action) {
   }
 }
 
-function* updateLecturerSaga(action) {
+export function* updateLecturerSaga(action) {
   try {
     yield call(lecturerApi.updateLecturer, action.payload);
 
@@ -31,7 +22,7 @@ function* updateLecturerSaga(action) {
   }
 }
 
-function* deleteLecturerSaga(action) {
+export function* deleteLecturerSaga(action) {
   try {
     yield call(lecturerApi.deleteLecturer, action.payload);
     yield put(lecturerActions.deleteLecturer.deleteLecturerSuccess(action.payload));
@@ -40,7 +31,7 @@ function* deleteLecturerSaga(action) {
   }
 }
 
-function* createLecturerSaga(action) {
+export function* createLecturerSaga(action) {
   try {
     const createdLecturer = yield call(lecturerApi.createLecturer, action.payload);
 

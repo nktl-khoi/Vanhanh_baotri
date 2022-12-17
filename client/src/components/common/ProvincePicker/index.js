@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Form, Input, Row, Select } from 'antd';
 import LocationVN from './LocationVN.json';
+
 const ProvincePicker = props => {
   let cityOptions = [];
   const [districtInSelectedCity, setDistrictInSelectedCity] = useState([]);
@@ -16,7 +17,6 @@ const ProvincePicker = props => {
     setSelectedCity(props.city);
   }, [props.city]);
 
-  //set district
   const mapDistrictToArray = districts => {
     let result = [];
     for (let district of Object.values(districts)) {
@@ -24,18 +24,15 @@ const ProvincePicker = props => {
     }
     return result;
   };
-
-  //set district when Select city
   useEffect(() => {
     for (let city of Object.values(LocationVN)) {
-      if (city.name === selectedCity) {
+      if (city.name === selectedCity || city.name === props.city) {
         setDistrictInSelectedCity(mapDistrictToArray(city.districts));
         return true;
       }
     }
   }, [selectedCity]);
 
-  //custom options
   const renderOptions = dataList => {
     if (dataList.length) {
       return dataList.map(data => {
@@ -52,15 +49,14 @@ const ProvincePicker = props => {
   const optionDistrictRendered = renderOptions(districtInSelectedCity);
   return (
     <Row gutter={20}>
-      <Col span={8}>
+      <Col xs={24} md={8} lg={8}>
         <Form.Item label="Address" name="detailsAddress" rules={[{ required: true }]}>
           <Input placeholder="Address" style={{ width: '100%' }} />
         </Form.Item>
       </Col>
-      <Col span={8}>
+      <Col xs={12} md={8} lg={8}>
         <Form.Item label="City" name="city" rules={[{ required: true }]}>
           <Select
-            showSearch
             value={selectedCity}
             placeholder="Tỉnh/Thành phố"
             onChange={val => {
@@ -71,10 +67,9 @@ const ProvincePicker = props => {
           </Select>
         </Form.Item>
       </Col>
-      <Col span={8}>
+      <Col xs={12} md={8} lg={8}>
         <Form.Item label="District" name="district" rules={[{ required: true }]}>
           <Select
-            showSearch
             value={selectedDistrict}
             placeholder="Huyện/Quận"
             onChange={val => {

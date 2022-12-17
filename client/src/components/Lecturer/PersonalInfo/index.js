@@ -1,15 +1,13 @@
 import { Button, Card, Col, DatePicker, Form, Input, message, Row, Select } from 'antd';
 import ProvincePicker from 'components/common/ProvincePicker';
+import { isEmpty } from 'lodash';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import * as lecturerActions from 'redux/actions/lecturers';
 import { getUsers } from 'redux/actions/users';
-import { lecturerState$, usersState$ } from 'redux/selectors';
-import { converToUser } from 'utils';
-import { checkUsernameIsExist, loadFieldsValue } from 'utils/loadFieldsValueForUser';
-import { dobValidator } from 'utils/validator';
+import { lecturerState$, userState$ } from 'redux/selectors';
 import styles from './index.module.less';
 
 const { Option } = Select;
@@ -18,11 +16,10 @@ const idRoleLecturer = '386af797-fdf6-42dc-8bab-d5b42561b5fb';
 
 const PersonalInfo = props => {
   const dispatch = useDispatch();
-  const history = useHistory();
   const [isSubmit, setIsSubmit] = useState(false);
   const [city, setCity] = useState('');
-  const lecturers = useSelector(lecturerState$);
-  const users = useSelector(usersState$);
+  const lecturers = useSelector(lectureState$);
+  const users = useSelector(userState$);
   const validateMessages = {
     required: '${label} is required!',
     types: {
@@ -73,12 +70,25 @@ const PersonalInfo = props => {
         city
       ) {
         if (typeSubmit === 'create') {
-          if (!checkUsernameIsExist(users, username)) {
+          if (!checkUsernameIsExist(username)) {
             if (confirmPassword !== password) {
               setIsSubmit(true);
               message.error('Confirm password does not match!');
             } else {
-              const createdLecturer = converToUser(data, idRoleLecturer);
+              const createdLecturer = {
+                displayName,
+                gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
+                dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
+                phoneNumber,
+                email,
+                address: [detailsAddress, district, city],
+                idRole: idRoleLecturer,
+                imageUrl: 'test',
+                username,
+                password,
+                isActivated: true,
+              };
+              console.log({ createdLecturer });
               dispatch(lecturerActions.createLecturer.createLecturerRequest(createdLecturer));
               setCity(city);
               setIsSubmit(true);
@@ -94,13 +104,21 @@ const PersonalInfo = props => {
       if (typeSubmit === 'edit') {
         const lecturer = lecturers.data.find(lecturer => lecturer.idLecturer === id);
 
-        const editedValue = {
-          ...data,
+        const editedLecturer = {
+          displayName,
+          gender: data.gender == 'male' ? 0 : data.gender == 'female' ? 1 : 2,
+          dob: moment(data.dob).format('DD/MM/YYYY').split('/').reverse().join('-'),
+          idLecturer: id,
+          address: [detailsAddress, district, city],
           idUser: lecturer.idUser,
-          username: lecturer.User.username,
-          password: lecturer.User.password,
+          username: lecturer.username,
+          password: lecturer.password,
+          isDeleted: lecturer.isDeleted,
+          isActivated: lecturer.isActivated,
+          imageUrl: lecturer.imageUrl,
+          idRole: idRoleLecturer,
         };
-        const editedLecturer = converToUser(editedValue, idRoleLecturer);
+        console.log({ editedLecturer });
         dispatch(lecturerActions.updateLecturer.updateLecturerRequest(editedLecturer));
         setCity(city);
         setIsSubmit(true);
@@ -108,31 +126,62 @@ const PersonalInfo = props => {
     }
   };
 
+  const dobValidator = (rule, value, callback) => {
+    try {
+      if (value > Date.now()) {
+        callback('Date of birth is not greater than current date');
+      } else {
+        callback();
+      }
+    } catch {
+      callback();
+    }
+  };
+  const checkUsernameIsExist = username => {
+    const result = users.data.find(user => user.username === username);
+    // result === empty => checkUsernameIsExist: false
+    return !isEmpty(result);
+  };
+
   // Load information lecturer to form
   React.useEffect(() => {
-    if (id && lecturers.data.length !== 0) {
-      const lecturer = lecturers.data.find(lecturer => lecturer.idLecturer === id);
-      loadFieldsValue(lecturer, setCity, form);
-    }
-  }, [lecturers.data]);
+    if (id) {
+      const lecturer =
+        lecturers.data && lecturers.data.find(lecturer => lecturer.idLecturer === id);
 
-  // Redirect to employee list
+      if (lecturer) {
+        const editedLecturer = {
+          displayName: lecturer.displayName,
+          gender: lecturer.gender === 0 ? 'male' : lecturer.gender === 1 ? 'female' : 'others',
+          dob: moment(lecturer.dob),
+          phoneNumber: lecturer.phoneNumber,
+          email: lecturer.email,
+          username: lecturer.username,
+          detailsAddress: lecturer.address[0],
+          district: lecturer.address[1],
+          city: lecturer.address[2],
+        };
+        form.setFieldsValue(editedLecturer);
+        setCity(lecturer.address[2]);
+      }
+    }
+  }, [id, lecturers]);
+
+  // Notifies when create or update lecturer success
   React.useEffect(() => {
     if (lecturers.isSuccess && isSubmit) {
-      if (id) {
-        message.success('Update lecturer success!');
-        history.push('/lecturer');
-      } else {
-        message.success('Create lecturer success!');
-      }
+      id
+        ? message.success('Update lecturer success!')
+        : message.success('Create lecturer success!');
+
       form.resetFields();
     }
-  }, [lecturers, history]);
+  }, [lecturers]);
 
   React.useEffect(() => {
     dispatch(lecturerActions.getLecturers.getLecturersRequest());
     dispatch(getUsers.getUsersRequest());
-  }, []);
+  }, [dispatch]);
 
   return (
     <Card>
@@ -205,7 +254,18 @@ const PersonalInfo = props => {
                 <Form.Item
                   label="Confirm password"
                   name="confirmPassword"
-                  rules={[{ required: true }, { min: 6 }]}>
+                  rules={[
+                    { required: true },
+                    { min: 6 },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (!value || getFieldValue('password') === value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject('Confirm password does not match!');
+                      },
+                    }),
+                  ]}>
                   <Input.Password placeholder="Confirm password" />
                 </Form.Item>
               </Col>

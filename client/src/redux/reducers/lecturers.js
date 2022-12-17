@@ -78,8 +78,7 @@ export default function lecturersReducer(state = INIT_STATE.lecturers, action) {
         data: state.data.map(lecturer => {
           const idLecturer = action.payload.idLecturer;
           if (lecturer.idLecturer === idLecturer) {
-            lecturer.User.isActivated = false;
-            lecturer.isDeleted = true;
+            lecturer.isActivated = false;
           }
           return lecturer;
         }),

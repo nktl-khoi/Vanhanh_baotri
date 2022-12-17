@@ -1,7 +1,5 @@
 import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import { Breadcrumb, Button, Card, Input, Modal, Table, Tag } from 'antd';
-import ExportCSV from 'components/common/ExportCSV';
-import { employeeHeadersExcel } from 'constant/headersExcel';
+import { Breadcrumb, Button, Card, Input, Modal, notification, Table, Tag } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,6 +7,7 @@ import { useHistory } from 'react-router-dom';
 import * as employeeActions from 'redux/actions/employees';
 import { employeeState$ } from 'redux/selectors';
 import styles from './index.module.less';
+import { CSVLink } from 'react-csv';
 
 const { confirm } = Modal;
 const { Search } = Input;
@@ -18,26 +17,24 @@ const mapToDataSource = array => {
     return {
       key: item.idEmployee,
       idEmployee: item.idEmployee,
-      idUser: item.idUser,
-      username: item.User.username === null ? 'null' : item.User.username,
-      displayName: item.User.displayName,
-      email: item.User.email,
-      gender: item.User.gender === 0 ? 'Male' : item.User.gender === 1 ? 'Female' : 'Others',
-      phoneNumber: item.User.phoneNumber,
-      address: item.User.address,
-      birthday: moment(item.User.dob).format('DD/MM/YYYY'),
-      isActivated: item.User.isActivated,
-      isDeleted: item.isDeleted,
+      username: item.username === null ? 'null' : item.username,
+      displayName: item.displayName,
+      email: item.email,
+      gender: item.gender === 0 ? 'Male' : item.gender === 1 ? 'Female' : 'Others',
+      phoneNumber: item.phoneNumber,
+      address: item.address,
+      birthday: moment(item.dob).format('DD/MM/YYYY'),
+      isActivated: item.isActivated,
     };
   });
 };
 
 const Employee = () => {
-  const employees = useSelector(employeeState$);
   const [dataSource, setDataSource] = React.useState([]);
   const [filteredData, setFilteredData] = React.useState([]);
   const dispatch = useDispatch();
   const history = useHistory();
+  const employees = useSelector(employeeState$);
   const columns = [
     {
       title: 'Full name',
@@ -116,11 +113,9 @@ const Employee = () => {
     },
   ];
 
-  // get list from API
   React.useEffect(() => {
     dispatch(employeeActions.getEmployees.getEmployeesRequest());
-  }, []);
-
+  }, [dispatch]);
   React.useEffect(() => {
     const mapEmployeeToData = mapToDataSource(employees.data);
     setDataSource(mapEmployeeToData);
@@ -151,6 +146,39 @@ const Employee = () => {
     );
     setFilteredData(dataSearch);
   };
+
+  const headersExcel = [
+    {
+      label: 'Full name',
+      key: 'displayName',
+    },
+    {
+      label: 'Email',
+      key: 'email',
+    },
+    {
+      label: 'Gender',
+      key: 'gender',
+    },
+    {
+      label: 'Phone number',
+      key: 'phoneNumber',
+    },
+    {
+      label: 'Address',
+      key: 'address',
+    },
+    {
+      label: 'Birthday',
+      key: 'birthday',
+    },
+    {
+      label: 'Status',
+      key: 'isActivated',
+    },
+  ];
+
+  console.log({ dataSource });
 
   return (
     <div>
@@ -187,7 +215,13 @@ const Employee = () => {
               Add employee
             </Button>
             <Button className={styles.btn} size="large" type="primary">
-              <ExportCSV data={employees.data} headers={employeeHeadersExcel} type="employee" />
+              <CSVLink
+                filename={'Expense_Table.csv'}
+                data={dataSource}
+                headers={headersExcel}
+                className="btn btn-primary">
+                Export to CSV
+              </CSVLink>
             </Button>
           </div>
         </div>

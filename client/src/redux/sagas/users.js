@@ -1,17 +1,8 @@
 import { call, put } from 'redux-saga/effects';
 import userApi from '../../api/userApi';
 import * as userActions from '../actions/users';
-import { takeLatest } from 'redux-saga/effects';
 
-export function* userSaga() {
-  yield takeLatest(userActions.getUsers.getUsersRequest, fetchUsersSaga);
-  yield takeLatest(userActions.getUser.getUserRequest, fetchUserSaga);
-  yield takeLatest(userActions.createUser.createUserRequest, createUserSaga);
-  yield takeLatest(userActions.updateUser.updateUserRequest, updateUserSaga);
-  yield takeLatest(userActions.deleteUser.deleteUserRequest, deleteUserSaga);
-}
-
-function* fetchUsersSaga(action) {
+export function* fetchUsersSaga(action) {
   try {
     const users = yield call(userApi.getAll);
 
@@ -20,7 +11,7 @@ function* fetchUsersSaga(action) {
     yield put(userActions.getUsers.getUsersFailure(error));
   }
 }
-function* fetchUserSaga(action) {
+export function* fetchUserSaga(action) {
   try {
     const user = yield call(userApi.getUserById, action.payload);
 
@@ -30,7 +21,7 @@ function* fetchUserSaga(action) {
   }
 }
 
-function* updateUserSaga(action) {
+export function* updateUserSaga(action) {
   try {
     yield call(userApi.updateUser, action.payload);
     yield put(userActions.updateUser.updateUserSuccess(action.payload));
@@ -39,7 +30,7 @@ function* updateUserSaga(action) {
   }
 }
 
-function* deleteUserSaga(action) {
+export function* deleteUserSaga(action) {
   try {
     yield call(userApi.deleteUser, action.payload);
 
@@ -49,7 +40,7 @@ function* deleteUserSaga(action) {
   }
 }
 
-function* createUserSaga(action) {
+export function* createUserSaga(action) {
   try {
     const createdUser = yield call(userApi.createUser, action.payload);
 
