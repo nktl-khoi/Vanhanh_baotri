@@ -3,13 +3,12 @@ import { getAnalytics } from 'firebase/analytics';
 import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAwI2qUg96PVmoYBf5T4B7o_ncggVK-89I',
-  authDomain: 'lanspire.firebaseapp.com',
-  projectId: 'lanspire',
-  storageBucket: 'lanspire.appspot.com',
-  messagingSenderId: '918840591441',
-  appId: '1:918840591441:web:63fa3355ccaa8fd452e470',
-  measurementId: 'G-ZH6CQ6Q5YJ',
+  apiKey: 'AIzaSyDdrcz5My-ugI8V73RFizbIOXJnqLY2Dts',
+  authDomain: 'lang-center.firebaseapp.com',
+  projectId: 'lang-center',
+  storageBucket: 'lang-center.appspot.com',
+  messagingSenderId: '293752566191',
+  appId: '1:293752566191:web:313f279c52406341287f5a',
 };
 
 const app = initializeApp(firebaseConfig);
