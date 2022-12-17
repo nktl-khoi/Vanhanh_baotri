@@ -1,27 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import {
-  Table,
-  Input,
-  Button,
-  Tag,
-  Col,
-  Row,
-  Modal,
-  notification,
-  Breadcrumb,
-  Card,
-  Tooltip,
-  Drawer,
-} from 'antd';
-import { EditOutlined, DeleteOutlined, EyeOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { Table, Input, Button, Tag, Col, Row, Modal, notification, Breadcrumb, Card } from 'antd';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styles from './index.module.less';
 import { studentState$ } from 'redux/selectors/index';
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteStudents, getStudents } from 'redux/actions/students';
-import { formatName } from 'utils/stringHelper';
-import { currentDate } from 'utils/dateTime';
-import moment from 'moment';
+
 const { Search } = Input;
 
 const Student = () => {
@@ -50,12 +35,10 @@ const Student = () => {
       ellipsis: true,
     },
     {
-      width: '15%',
       title: 'Phone number',
       dataIndex: 'phoneNumber',
       key: 'phoneNumber',
       align: 'center',
-      ellipsis: 'true',
       responsive: ['md'],
     },
     {
@@ -73,24 +56,20 @@ const Student = () => {
       align: 'center',
       filters: [
         {
-          text: 'No study',
-          value: 0,
-        },
-        {
           text: 'Studying',
-          value: 1,
+          value: true,
         },
         {
-          text: 'Registered',
-          value: 2,
+          text: 'No study',
+          value: false,
         },
       ],
       defaultFilteredValue: [true],
       render: (status, index) => {
-        const color = status === 0 ? 'gray' : status === 1 ? 'blue' : 'orange';
+        const color = status ? 'blue' : 'gray';
         return (
           <Tag color={color} key={index}>
-            {status === 0 ? 'No study' : status === 1 ? 'Studying' : 'Registered'}
+            {status ? 'Studying' : 'No study'}
           </Tag>
         );
       },
@@ -99,28 +78,18 @@ const Student = () => {
     },
     {
       key: 'actions',
-      width: '150px',
+      width: '100px',
       render: record => {
         return (
           <div className={styles['actions-for-item']}>
-            <Tooltip title="More info">
-              <EyeOutlined
-                className={styles['btn-view']}
-                onClick={() => handleClickView(record.idStudent)}
-              />
-            </Tooltip>
-            <Tooltip title="Edit">
-              <EditOutlined
-                className={styles['btn-edit']}
-                onClick={() => handleEditStudent(record.idStudent)}
-              />
-            </Tooltip>
-            <Tooltip title="Delete">
-              <DeleteOutlined
-                className={styles['btn-delete']}
-                onClick={() => onDelete(record.idStudent)}
-              />
-            </Tooltip>
+            <EditOutlined
+              className={styles['btn-edit']}
+              onClick={() => handleEditStudent(record.idStudent)}
+            />
+            <DeleteOutlined
+              className={styles['btn-delete']}
+              onClick={() => onDelete(record.idStudent)}
+            />
           </div>
         );
       },
@@ -132,12 +101,11 @@ const Student = () => {
   const [data, setData] = useState([]); //Data ban đầu
   const [dataSearch, setDataSearch] = useState([]); //Data sau khi search
   const [isDeleted, setIsDeleted] = useState(false);
-  const [idStudent, setIdStudent] = useState();
   const [visibleModal, setVisibleModal] = useState(false);
+  const [idStudent, setIdStudent] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const history = useHistory();
-
   useEffect(() => {
     dispatch(getStudents.getStudentsRequest());
   }, []);
@@ -146,29 +114,13 @@ const Student = () => {
   useEffect(() => {
     const tmpData = students.data.map((student, index) => {
       const address = `${student.User.address[0]}, ${student.User.address[1]}, ${student.User.address[2]}`;
-      var status = 0;
-      for (let i = 0; i < student.Classes.length; ++i) {
-        const item = student.Classes[i];
-        if (
-          (moment(item.startDate) < currentDate() && moment(item.endDate) > currentDate()) ||
-          moment(item.endDate).format('DD/MM/YYYY') === currentDate().format('DD/MM/YYYY') ||
-          moment(item.startDate).format('DD/MM/YYYY') === currentDate().format('DD/MM/YYYY')
-        ) {
-          status = 1;
-          break;
-        }
-        if (moment(item.startDate) > currentDate()) {
-          status = 2;
-        }
-      }
-
       return {
         idStudent: student.idStudent,
-        name: formatName(student.User.displayName),
+        name: student.User.displayName,
         email: student.User.email,
         phoneNumber: student.User.phoneNumber,
         address: address,
-        status,
+        status: !student.isDeleted,
       };
     });
     setData(tmpData);
@@ -183,12 +135,10 @@ const Student = () => {
     const dataTmp = data.filter(item => item.name.toLowerCase().search(value.toLowerCase()) >= 0);
     setDataSearch(dataTmp);
   };
-
   const onDelete = id => {
     setVisibleModal(true);
     setIdStudent(id);
   };
-
   const handleDeleteStudent = () => {
     dispatch(deleteStudents.deleteStudentsRequest(idStudent));
     setVisibleModal(false);
@@ -206,7 +156,7 @@ const Student = () => {
           width: 300,
         },
       });
-    } else if (isDeleted && !students.isSuccess && students.error.length > 0) {
+    } else if (isDeleted && students.isSuccess && students.error.length > 0) {
       notification.error();
       ({
         message: students.error,
@@ -216,12 +166,6 @@ const Student = () => {
       });
     }
   }, [students.isLoading]);
-
-  //click button view
-  const handleClickView = id => {
-    history.push(`/student/details/${id}`);
-  };
-
   return (
     <div className={styles.container}>
       <Modal
@@ -235,7 +179,7 @@ const Student = () => {
         <Breadcrumb.Item>
           <a href="/">Dashboard</a>
         </Breadcrumb.Item>
-        <Breadcrumb.Item>Student list</Breadcrumb.Item>
+        <Breadcrumb.Item>Student</Breadcrumb.Item>
       </Breadcrumb>
       <h2 className={styles.title}>Student list</h2>
       <Card>

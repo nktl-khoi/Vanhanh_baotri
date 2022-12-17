@@ -6,6 +6,7 @@ import AddAppoint from 'pages/Class/AddAppoint';
 import Course from 'pages/Course';
 import AddCourse from 'pages/Course/AddCourse';
 import ColumnTranscript from 'pages/Course/ColumnTranscript';
+import CourseDetails from 'pages/Course/CourseDetails';
 import CourseType from 'pages/Course/CourseType';
 import Level from 'pages/Course/Level';
 import Dashboard from 'pages/Dashboard';
@@ -15,8 +16,6 @@ import Lecturer from 'pages/Lecturer';
 import AddLecturer from 'pages/Lecturer/AddLecturer';
 import Student from 'pages/Student';
 import AddStudent from 'pages/Student/AddStudent';
-import StudentDetails from 'pages/Student/StudentDetails';
-import ArrangeClass from 'pages/Student/StudentDetails/ArrangeClass';
 import TimeFrame from 'pages/TimeFrame';
 import React from 'react';
 import {
@@ -28,7 +27,8 @@ import {
   studentSvg,
   timeSvg,
 } from 'utils/iconsvg';
-import Details from 'pages/Class/Details';
+import ClassDetails from 'pages/Class/ClassDetails';
+import ClassExam from 'components/Class/ClassExam';
 
 const DashboardIcon = props => <Icon component={dashboardSvg} {...props} />;
 const LecturerIcon = props => <Icon component={lecturerSvg} {...props} />;
@@ -70,16 +70,6 @@ const adminRoutes = [
     page: () => <AddStudent />,
   },
   {
-    path: '/student/details/:idStudent',
-    exact: true,
-    page: () => <StudentDetails />,
-  },
-  {
-    path: '/student/details/arrange-class/:idStudent',
-    exact: true,
-    page: () => <ArrangeClass />,
-  },
-  {
     path: '/course/',
     exact: true,
     page: () => <Course />,
@@ -93,6 +83,11 @@ const adminRoutes = [
     path: '/course/edit/:idCourse',
     exact: true,
     page: () => <AddCourse />,
+  },
+  {
+    path: '/course/details/:idCourse',
+    exact: true,
+    page: () => <CourseDetails />,
   },
   {
     path: '/coursetype/',
@@ -162,7 +157,7 @@ const adminRoutes = [
   {
     path: '/class/details/:idClass',
     exact: true,
-    page: () => <Details />,
+    page: () => <ClassDetails />,
   },
   {
     path: '/employee/edit/:id',
