@@ -1,6 +1,8 @@
 import Icon from '@ant-design/icons';
 import Class from 'pages/Class';
 import AddClass from 'pages/Class/AddClass';
+import AppointLecturer from 'pages/Class/AppointLecturer';
+import AddAppoint from 'pages/Class/AddAppoint';
 import Course from 'pages/Course';
 import AddCourse from 'pages/Course/AddCourse';
 import ColumnTranscript from 'pages/Course/ColumnTranscript';
@@ -13,6 +15,8 @@ import Lecturer from 'pages/Lecturer';
 import AddLecturer from 'pages/Lecturer/AddLecturer';
 import Student from 'pages/Student';
 import AddStudent from 'pages/Student/AddStudent';
+import StudentDetails from 'pages/Student/StudentDetails';
+import ArrangeClass from 'pages/Student/StudentDetails/ArrangeClass';
 import TimeFrame from 'pages/TimeFrame';
 import React from 'react';
 import {
@@ -24,6 +28,7 @@ import {
   studentSvg,
   timeSvg,
 } from 'utils/iconsvg';
+import Details from 'pages/Class/Details';
 
 const DashboardIcon = props => <Icon component={dashboardSvg} {...props} />;
 const LecturerIcon = props => <Icon component={lecturerSvg} {...props} />;
@@ -65,6 +70,16 @@ const adminRoutes = [
     page: () => <AddStudent />,
   },
   {
+    path: '/student/details/:idStudent',
+    exact: true,
+    page: () => <StudentDetails />,
+  },
+  {
+    path: '/student/details/arrange-class/:idStudent',
+    exact: true,
+    page: () => <ArrangeClass />,
+  },
+  {
     path: '/course/',
     exact: true,
     page: () => <Course />,
@@ -98,6 +113,8 @@ const adminRoutes = [
     path: '/level/:idLevel',
     exact: true,
     page: () => <Level />,
+  },
+  {
     path: '/lecturer/edit/:id',
     exact: true,
     page: () => <AddLecturer />,
@@ -138,14 +155,16 @@ const adminRoutes = [
     page: () => <AddClass />,
   },
   {
-    path: '/class/add/:idClass',
+    path: '/class/edit/:idClass',
     exact: true,
     page: () => <AddClass />,
   },
   {
-    path: '/class/update/:idClass',
+    path: '/class/details/:idClass',
     exact: true,
-    page: () => <AddClass />,
+    page: () => <Details />,
+  },
+  {
     path: '/employee/edit/:id',
     exact: true,
     page: () => <AddEmployee />,
