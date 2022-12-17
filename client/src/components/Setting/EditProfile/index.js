@@ -1,23 +1,11 @@
-import { UserOutlined } from '@ant-design/icons';
-import {
-  Avatar,
-  Button,
-  Col,
-  DatePicker,
-  Form,
-  Input,
-  notification,
-  Row,
-  Select,
-  Skeleton,
-  Upload,
-} from 'antd';
+import { Button, Col, DatePicker, Form, Input, notification, Row, Select, Skeleton } from 'antd';
 import ImageUploader from 'components/common/ImageUploader';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from 'redux/actions/users';
 import { userState$ } from 'redux/selectors';
+import { phoneNumberValidator } from 'utils/validator';
 import userApi from '../../../api/userApi';
 import LocationVN from '../../common/ProvincePicker/LocationVN.json';
 const { Option } = Select;
@@ -87,6 +75,7 @@ const EditProfile = () => {
         record['address'] = user.address[0];
         record['district'] = user.address[1];
         record['city'] = user.address[2];
+        setSelectedCity(user.address[2]);
       }
       setImgUrl(user.imageUrl);
       form.setFieldsValue(record);
@@ -165,8 +154,8 @@ const EditProfile = () => {
                   }}
                   label="Phone number"
                   name="phoneNumber"
-                  rules={[{ required: true }, { min: 10 }]}>
-                  <Input type="text" placeholder="Phone number" maxLength="10" />
+                  rules={[{ required: true }, { validator: phoneNumberValidator }]}>
+                  <Input type="text" placeholder="Phone number" minLength={10} maxLength={10} />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -184,8 +173,9 @@ const EditProfile = () => {
                   <Select
                     value={selectedCity}
                     placeholder="City"
+                    showSearch
                     onChange={val => {
-                      setSelectedDistrict(null);
+                      form.setFieldsValue({ ...form.getFieldsValue, district: '' });
                       setSelectedCity(val);
                     }}>
                     {optionCityRendered}
@@ -195,6 +185,7 @@ const EditProfile = () => {
               <Col span={12}>
                 <Form.Item label="District" name="district" rules={[{ required: true }]}>
                   <Select
+                    showSearch
                     value={selectedDistrict}
                     placeholder="District"
                     onChange={val => {

@@ -3,7 +3,7 @@ import { Breadcrumb, Button, Card, Col, Row, Tabs, Tooltip } from 'antd';
 import Grade from 'components/Student/Grade';
 import TabArrangeClass from 'components/Student/TabArrangeClass';
 import PersonalInfo from 'components/Student/TabPersonalInfo';
-import Timetable from 'components/Student/Timetable/index.js';
+import StudentTimetable from 'components/Student/TabTimetable';
 import TimetableToPrint from 'components/Student/TimetableToPrint';
 import React, { useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
@@ -25,7 +25,7 @@ const StudentDetails = () => {
           <Link to="/">Dashboard</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <Link to="/student/list">Students</Link>
+          <Link to="/student">Students</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>Student details</Breadcrumb.Item>
       </Breadcrumb>
@@ -52,7 +52,7 @@ const StudentDetails = () => {
                 </Tooltip>
               </Col>
               <Col span={24}>
-                <Timetable />
+                <StudentTimetable />
               </Col>
             </Row>
           </Card>

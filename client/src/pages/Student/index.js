@@ -21,6 +21,8 @@ import { deleteStudents, getStudents } from 'redux/actions/students';
 import { studentState$ } from 'redux/selectors/index';
 import { currentDate } from 'utils/dateTime';
 import { formatName } from 'utils/stringHelper';
+import ExportCSV from 'components/common/ExportCSV';
+import { studentHeadersExcel } from 'constant/headersExcel';
 
 const { Search } = Input;
 
@@ -104,7 +106,7 @@ const Student = () => {
       render: idStudent => {
         return (
           <div className={role !== 'employee' && 'flex'}>
-            <Tooltip title="Student details">
+            <Tooltip title="View details">
               <Link to={`/student/details/${idStudent}`}>
                 <Button icon={<EyeOutlined />} />
               </Link>
@@ -118,7 +120,7 @@ const Student = () => {
             )}
             {role !== 'employee' && (
               <Tooltip title="Delete">
-                <Button danger icon={<DeleteOutlined />} onClick={() => handleDelete(idCourse)} />
+                <Button danger icon={<DeleteOutlined />} onClick={() => handleDelete(idStudent)} />
               </Tooltip>
             )}
           </div>
@@ -211,6 +213,7 @@ const Student = () => {
   return (
     <div>
       <Modal
+        centered
         title="Warning"
         visible={visibleModal}
         onOk={handleDeleteStudent}
@@ -237,12 +240,17 @@ const Student = () => {
             />
           </Col>
           <Col flex="auto" />
-          <Col xs={24} sm={24} md={6} lg={6} xl={4}>
+          <Col span={4}>
             {role === 'admin' && (
               <Button type="primary" size="large" block>
                 <Link to="/student/add">Add student</Link>
               </Button>
             )}
+          </Col>
+          <Col span={4}>
+            <Button type="primary" size="large" block>
+              <ExportCSV data={students.data} headers={studentHeadersExcel} type="student" />
+            </Button>
           </Col>
           <Col span={24}>
             <Table

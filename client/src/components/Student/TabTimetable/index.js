@@ -1,5 +1,6 @@
-import { Col, notification, Row } from 'antd';
+import { notification } from 'antd';
 import studentApi from 'api/studentApi';
+import Timetable from 'components/common/Timetable';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,11 +8,8 @@ import { useParams } from 'react-router';
 import { getClasses } from 'redux/actions/classes';
 import { classState$ } from 'redux/selectors';
 import { currentDate } from 'utils/dateTime';
-import Day from './Day';
-import styles from './index.module.less';
-import Timeline from './Timeline';
 
-const Timetable = React.forwardRef((props, ref) => {
+const StudentTimetable = React.forwardRef((props, ref) => {
   const { idStudent } = useParams();
   const [student, setStudent] = useState();
   const [dataSource, setDataSource] = useState([[], [], [], [], [], [], []]);
@@ -83,20 +81,9 @@ const Timetable = React.forwardRef((props, ref) => {
 
   return (
     <div ref={ref}>
-      <Row gutter={5} style={{ backgroundColor: 'white' }}>
-        <Col span={3}>
-          <Timeline />
-        </Col>
-        {dataSource.map((day, i) => {
-          return (
-            <Col key={`day-${i}`} span={3} className={styles.dayOfWeek}>
-              <Day events={day} dayOfWeek={i} />
-            </Col>
-          );
-        })}
-      </Row>
+      <Timetable dataSource={dataSource} />
     </div>
   );
 });
 
-export default Timetable;
+export default StudentTimetable;

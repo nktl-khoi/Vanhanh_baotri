@@ -1,5 +1,6 @@
 import { Col, DatePicker, Form, Input, Row, Select } from 'antd';
 import React from 'react';
+import { phoneNumberValidator } from 'utils/validator';
 import ProvincePicker from '../ProvincePicker';
 
 const UserInfo = props => {
@@ -32,13 +33,13 @@ const UserInfo = props => {
   return (
     <div>
       <Row gutter={20} justify="center">
-        <Col span={15}>
+        <Col span={12}>
           <Form.Item label="Full name" name="fullName" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
         </Col>
 
-        <Col span={15}>
+        <Col span={6}>
           <Form.Item label="Gender" name="gender" rules={[{ required: true }]}>
             <Select>
               <Option value="male">Male</Option>
@@ -48,7 +49,7 @@ const UserInfo = props => {
           </Form.Item>
         </Col>
 
-        <Col span={15}>
+        <Col span={6}>
           <Form.Item
             label="DOB"
             name="dob"
@@ -56,16 +57,21 @@ const UserInfo = props => {
             <DatePicker format={dateFormat} style={{ width: '100%' }} />
           </Form.Item>
         </Col>
-        <Col span={15}>
+        <Col span={12}>
           <Form.Item
+            onKeyPress={event => {
+              if (!/[0-9]/.test(event.key)) {
+                event.preventDefault();
+              }
+            }}
             label="Phone number"
             name="phoneNumber"
-            rules={[{ required: true }, { validator: numberValidator }]}>
-            <Input />
+            rules={[{ required: true }, { validator: phoneNumberValidator }]}>
+            <Input type="text" placeholder="Phone number" minLength={10} maxLength={10} />
           </Form.Item>
         </Col>
 
-        <Col span={15}>
+        <Col span={12}>
           <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email' }]}>
             <Input />
           </Form.Item>

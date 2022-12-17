@@ -1,4 +1,4 @@
-import { Button, Card, Col, DatePicker, Form, Input, message, Row, Select } from 'antd';
+import { Button, Card, Col, DatePicker, Form, Input, notification, Row, Select } from 'antd';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,12 +8,12 @@ import { getUsers } from 'redux/actions/users';
 import { employeeState$, usersState$ } from 'redux/selectors';
 import { converToUser } from 'utils';
 import { checkUsernameIsExist, loadFieldsValue } from 'utils/loadFieldsValueForUser';
+import { dateValidator } from 'utils/validator';
 import ProvincePicker from '../../common/ProvincePicker';
 import styles from './index.module.less';
-import { dateValidator } from 'utils/validator';
-
+import { idRoleEmployee } from 'constant/roles';
+import { phoneNumberValidator } from 'utils/validator';
 const { Option } = Select;
-const idRoleEmployee = '0a15d8a4-e1a1-4fc1-ba7a-157b34959289';
 
 const PersonalInfo = props => {
   const [isSubmit, setIsSubmit] = useState(false);
@@ -62,7 +62,7 @@ const PersonalInfo = props => {
 
     const currentDate = moment();
     if (currentDate < dob) {
-      message.error('Date of birth is not greater than current date');
+      notification.error({ message: 'Date of birth is not greater than current date' });
     } else {
       // create employee
       if (
@@ -83,7 +83,7 @@ const PersonalInfo = props => {
             // check confirm password
             if (confirmPassword !== password) {
               setIsSubmit(true);
-              message.error('Confirm password does not match');
+              notification.error({ message: 'Confirm password does not match' });
             } else {
               const createdEmployee = converToUser(data, idRoleEmployee);
               dispatch(employeeActions.createEmployee.createEmployeeRequest(createdEmployee));
@@ -92,7 +92,7 @@ const PersonalInfo = props => {
             }
           } else {
             setIsSubmit(true);
-            isSubmit === true ? message.error('Username is exist!') : '';
+            isSubmit === true ? notification.error({ message: 'Username is exist!' }) : '';
           }
         }
       }
@@ -128,10 +128,10 @@ const PersonalInfo = props => {
   React.useEffect(() => {
     if (employees.isSuccess && isSubmit) {
       if (id) {
-        message.success('Update employee success!');
+        notification.success({ message: 'Update employee success!' });
         history.push('/employee');
       } else {
-        message.success('Create employee success!');
+        notification.success({ message: 'Create employee success!' });
       }
       form.resetFields();
       props.setImgUrl(null);
@@ -184,8 +184,8 @@ const PersonalInfo = props => {
                   event.preventDefault();
                 }
               }}
-              rules={[{ required: true }, { min: 10 }]}>
-              <Input type="text" placeholder="Phone number" maxLength="10" />
+              rules={[{ required: true }, { validator: phoneNumberValidator }]}>
+              <Input type="text" placeholder="Phone number" minLength={10} maxLength={10} />
             </Form.Item>
           </Col>
           <Col xs={12} md={12} lg={12} xl={8}>

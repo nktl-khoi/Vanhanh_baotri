@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
 import { deleteBill, getBills } from 'redux/actions/bills';
 import { billState$ } from 'redux/selectors';
+import { convertCommasToNumber } from 'utils/stringHelper';
 
 const { Option } = Select;
 const { confirm } = Modal;
@@ -40,14 +41,13 @@ const Invoice = () => {
       dataIndex: 'createdDate',
       align: 'center',
       width: '15%',
-      sortDirections: ['descend'],
       sorter: (a, b) => moment(a.createdDate, 'DD-MM-YYYY') - moment(b.createdDate, 'DD-MM-YYYY'),
     },
     {
       title: 'Total',
       dataIndex: 'total',
       align: 'center',
-      sorter: (a, b) => a.fee - b.fee,
+      sorter: (a, b) => a.total - b.total,
       render: text => <div>{parseInt(text).toLocaleString()}</div>,
     },
     {
@@ -114,7 +114,9 @@ const Invoice = () => {
         return billData.filter(bill => moment(bill.createdDate, 'DD-MM-YYYY').month() == cur);
       }
       case 'date':
-        return billData.filter(bill => moment(bill.createdDate, 'DD-MM-YYYY') == date);
+        return billData.filter(bill =>
+          moment(bill.createdDate, 'DD-MM-YYYY').isSame(moment(date), 'date')
+        );
       default:
         return billData;
     }

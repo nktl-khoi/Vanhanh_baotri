@@ -1,5 +1,5 @@
 import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import { Button, Col, Form, Image, Modal, notification, Row, Table, Tooltip } from 'antd';
+import { Button, Col, Form, Modal, notification, Row, Table, Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -195,7 +195,8 @@ const AddAppoint = () => {
           key: lecturer.idLecturer,
           idLecturer: lecturer.idLecturer,
           lecturerName: lecturer.User.displayName,
-          gender: lecturer.gender == 1 ? 'Male' : 'Female',
+          gender:
+            lecturer.User.gender === 0 ? 'Male' : lecturer.User.gender === 1 ? 'Female' : 'Others',
           phoneNumber: lecturer.User.phoneNumber,
           dob: lecturer.User.dob,
         });
