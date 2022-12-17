@@ -12,10 +12,10 @@ import levelsReducer from './level';
 import columnTranscriptsReducer from './columnTranscript';
 import classesReducer from './classes';
 import lecturersReducer from './lecturers';
-import testTypesReducer from './testType';
-import examsReducer from './exam';
+import parameterReducer from './parameters';
+import INIT_STATE from 'redux/constant';
 
-export default combineReducers({
+const appReducer = combineReducers({
   employees: employeesReducer,
   users: usersReducer,
   user: userReducer,
@@ -29,6 +29,14 @@ export default combineReducers({
   columnTranscripts: columnTranscriptsReducer,
   classes: classesReducer,
   lecturers: lecturersReducer,
-  testTypes: testTypesReducer,
-  exams: examsReducer,
+  parameters: parameterReducer,
 });
+const rootReducer = (state, action) => {
+  if (action.type === 'USER_LOGOUT') {
+    return appReducer(undefined, action);
+  }
+
+  return appReducer(state, action);
+};
+
+export default rootReducer;

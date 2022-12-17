@@ -6,7 +6,6 @@ import AddAppoint from 'pages/Class/AddAppoint';
 import Course from 'pages/Course';
 import AddCourse from 'pages/Course/AddCourse';
 import ColumnTranscript from 'pages/Course/ColumnTranscript';
-import CourseDetails from 'pages/Course/CourseDetails';
 import CourseType from 'pages/Course/CourseType';
 import Level from 'pages/Course/Level';
 import Dashboard from 'pages/Dashboard';
@@ -27,8 +26,9 @@ import {
   studentSvg,
   timeSvg,
 } from 'utils/iconsvg';
-import ClassDetails from 'pages/Class/ClassDetails';
-import ClassExam from 'components/Class/ClassExam';
+import Details from 'pages/Class/Details';
+import Setting from 'pages/Setting/Setting';
+import Profile from 'pages/Setting/Profile';
 
 const DashboardIcon = props => <Icon component={dashboardSvg} {...props} />;
 const LecturerIcon = props => <Icon component={lecturerSvg} {...props} />;
@@ -83,11 +83,6 @@ const adminRoutes = [
     path: '/course/edit/:idCourse',
     exact: true,
     page: () => <AddCourse />,
-  },
-  {
-    path: '/course/details/:idCourse',
-    exact: true,
-    page: () => <CourseDetails />,
   },
   {
     path: '/coursetype/',
@@ -157,12 +152,22 @@ const adminRoutes = [
   {
     path: '/class/details/:idClass',
     exact: true,
-    page: () => <ClassDetails />,
+    page: () => <Details />,
   },
   {
     path: '/employee/edit/:id',
     exact: true,
     page: () => <AddEmployee />,
+  },
+  {
+    path: '/setting/',
+    exact: true,
+    page: () => <Setting />,
+  },
+  {
+    path: '/profile/',
+    exact: true,
+    page: () => <Profile />,
   },
 ];
 
@@ -248,6 +253,22 @@ const adminMenuItems = {
           path: '/class/',
           name: 'Class list',
           component: <Class />,
+        },
+      ],
+    },
+    {
+      name: 'Setting',
+      icon: <ClassIcon />,
+      routes: [
+        {
+          path: '/profile/',
+          name: 'Profile',
+          component: <Profile />,
+        },
+        {
+          path: '/setting/',
+          name: 'Setting',
+          component: <Setting />,
         },
       ],
     },

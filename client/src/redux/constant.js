@@ -7,14 +7,17 @@ const INIT_STATE = {
   users: {
     data: [],
     isLoading: false,
+    isSuccess: false,
   },
   user: {
     data: {},
     isLoading: false,
+    isSuccess: false,
   },
   auth: {
     data: {},
     isLoading: false,
+    isSuccess: false,
   },
   lecturers: {
     data: [],
@@ -74,12 +77,7 @@ const INIT_STATE = {
     isLoading: false,
     isSuccess: false,
   },
-  testTypes: {
-    data: [],
-    isLoading: false,
-    isSuccess: false,
-  },
-  exams: {
+  parameters: {
     data: [],
     isLoading: false,
     isSuccess: false,
