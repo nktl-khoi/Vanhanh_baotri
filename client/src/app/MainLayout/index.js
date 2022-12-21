@@ -29,7 +29,7 @@ const MainLayout = props => {
 
   return (
     <ProLayout
-      title="Lanspire"
+      title="Lang Center"
       logo={logo}
       fixSiderbar
       fixedHeader

@@ -7,7 +7,7 @@ import { currentDate } from 'utils/dateTime';
 import styles from './index.module.less';
 
 const Invoice = React.forwardRef((props, ref) => {
-  const [centerName, setCenterName] = useState('Lanspire');
+  const [centerName, setCenterName] = useState('Lang Center');
   const [centerAddress, setCenterAddress] = useState('Hồ chí minh');
   const [centerPhone, setCenterPhone] = useState('012345678');
   const { fullName, phoneNumber, address, totalFee, dataSource, creator } = props;

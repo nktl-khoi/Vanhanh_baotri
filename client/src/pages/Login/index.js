@@ -70,7 +70,7 @@ const Login = () => {
               <div style={{ margin: '1.5rem 0' }}>
                 <div style={{ textAlign: 'center' }}>
                   <img src={logo} style={{ height: '5rem' }} />
-                  <p>Welcom to Lanspire!</p>
+                  <p>Welcom to Lang Center!</p>
                 </div>
                 <Row justify="center">
                   <Col xs={24} sm={24} md={20} lg={20}>

@@ -7,7 +7,7 @@ import { getParameters } from 'redux/actions/parameters';
 
 const StudentCard = React.forwardRef((props, ref) => {
   const info = props.studentCard;
-  const [centerName, setCenterName] = useState('Lanspire');
+  const [centerName, setCenterName] = useState('Lang Center');
   const [centerAddress, setCenterAddress] = useState('Hồ chí minh');
   const [centerPhone, setCenterPhone] = useState('012345678');
   const [centerEmail, setCenterEmail] = useState('lanspire@gmail.com');
