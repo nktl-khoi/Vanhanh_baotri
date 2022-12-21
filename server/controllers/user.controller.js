@@ -1,4 +1,5 @@
 const { User, Role } = require('../models');
+const hash = require('../utils/hashPassword');
 
 const create = (req, res) => {
   // Validate request
@@ -9,10 +10,12 @@ const create = (req, res) => {
     return;
   }
 
+  let password = hash(req.body.password);
+
   // Create a User
   const user = {
     username: req.body.username,
-    password: req.body.password,
+    password: password,
     displayName: req.body.displayName,
     gender: req.body.gender,
     phoneNumber: req.body.phoneNumber,
