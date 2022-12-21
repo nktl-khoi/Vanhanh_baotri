@@ -1,4 +1,4 @@
-const { Lecturer, User, Class, TimeFrame } = require('../models');
+const { Lecturer, User, Class, TimeFrame, Role } = require('../models');
 const hash = require('../utils/hashPassword');
 
 const create = async (req, res) => {
@@ -10,6 +10,14 @@ const create = async (req, res) => {
       });
       return;
     }
+
+    // get role lecturer
+    const role = await Role.findOne({
+      where: {
+        name: 'lecturer',
+      },
+    });
+
     // hash password
     let password = hash(req.body.password);
 
@@ -24,7 +32,7 @@ const create = async (req, res) => {
       imageUrl: req.body.imageUrl,
       address: req.body.address,
       dob: req.body.dob,
-      idRole: req.body.idRole,
+      idRole: role.idRole,
       isActivated: true,
     };
 

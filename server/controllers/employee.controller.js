@@ -1,4 +1,4 @@
-const { Employee, User } = require('../models');
+const { Employee, User, Role } = require('../models');
 const hash = require('../utils/hashPassword');
 
 const create = async (req, res) => {
@@ -10,6 +10,14 @@ const create = async (req, res) => {
       });
       return;
     }
+
+    // get role lecturer
+    const role = await Role.findOne({
+      where: {
+        name: 'employee',
+      },
+    });
+
     // hash password
     let password = hash(req.body.password);
 
@@ -23,7 +31,7 @@ const create = async (req, res) => {
       imageUrl: req.body.imageUrl,
       address: req.body.address,
       dob: req.body.dob,
-      idRole: req.body.idRole,
+      idRole: role.idRole,
       isActivated: true,
     };
     // Save Employee in the database
