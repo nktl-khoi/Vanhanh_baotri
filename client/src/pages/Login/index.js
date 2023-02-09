@@ -38,7 +38,7 @@ const Login = () => {
         localStorage.setItem('accessToken', auth.accessToken);
         localStorage.setItem('refreshToken', auth.refreshToken);
         localStorage.setItem('idUser', auth.user.idUser);
-        localStorage.setItem('role', auth.user.Role.name);
+        // localStorage.setItem('role', auth.user.Role.name);
         localStorage.setItem('idLecturer', auth.user.Lecturer?.idLecturer);
         localStorage.setItem('idEmployee', auth.user.Employee?.idEmployee);
         history.push('/');
