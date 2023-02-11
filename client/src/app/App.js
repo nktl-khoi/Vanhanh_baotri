@@ -1,5 +1,6 @@
 import { ConfigProvider } from 'antd';
 import enUS from 'antd/lib/locale/en_US';
+import AboutUs from 'pages/AboutUs';
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { adminMenuItems, adminRoutes } from 'routes/AdminRoutes';
@@ -32,6 +33,9 @@ function App() {
     <ConfigProvider locale={enUS}>
       <Router>
         <Switch>
+          <Route path="/about" exact>
+            <AboutUs />
+          </Route>
           <Route path="/" render={renderRoutes} />
         </Switch>
       </Router>

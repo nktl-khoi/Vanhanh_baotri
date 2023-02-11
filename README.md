@@ -1,4 +1,4 @@
-# Lanspire
+# LangCenter
 
 ## Main features
 

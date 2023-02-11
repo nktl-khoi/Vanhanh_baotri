@@ -59,19 +59,19 @@ const Transcript = () => {
       }
       if (isHasExam.testDate) {
         if (moment().isBefore(moment(isHasExam.testDate))) {
-          notification['error']({
-            message: 'Error',
-            description: `The exam hasn't taken place yet`,
-          });
-          return false;
+          // notification['error']({
+          //   message: 'Error',
+          //   description: `The exam hasn't taken place yet`,
+          // });
+          // return false;
         }
       }
     } else {
-      notification['error']({
-        message: 'Error',
-        description: `Column doesn't have exam.`,
-      });
-      return false;
+      // notification['error']({
+      //   message: 'Error',
+      //   description: `Column doesn't have exam.`,
+      // });
+      // return false;
     }
     return true;
   };
